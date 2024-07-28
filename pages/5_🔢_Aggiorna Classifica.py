@@ -52,7 +52,20 @@ def load_data(file_path):
         return pd.DataFrame()
 
 # Carica i dati
-file_path = 'files/Benpoker.xlsx'
+# Trova il file più recente
+directory = 'files'
+prefix = 'classifica_aggiornata'
+
+most_recent_file = f.get_most_recent_file(directory, prefix)
+
+if most_recent_file:
+    file_path= load_data('files/' + most_recent_file)
+else:
+    file_path= load_data('files/Benpoker.xlsx')
+
+
+
+
 if 'classifica_df' not in st.session_state:
     st.session_state.classifica_df = load_data(file_path)
 
