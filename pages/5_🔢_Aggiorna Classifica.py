@@ -53,18 +53,17 @@ def load_data(file_path):
 
 # Carica i dati
 # Trova il file più recente
-# directory = 'files'
-# prefix = 'classifica_aggiornata'
+directory = 'files'
+prefix = 'classifica_aggiornata'
 
-# most_recent_file = f.get_most_recent_file(directory, prefix)
+most_recent_file = f.get_most_recent_file(directory, prefix)
 
-# if most_recent_file:
-#     file_path= load_data('files/' + most_recent_file)
-# else:
-#     file_path= load_data('files/Benpoker.xlsx')
+if most_recent_file:
+    file_path='files/' + most_recent_file
+else:
+    file_path= 'files/Benpoker.xlsx'
 
 
-file_path= load_data('files/Benpoker.xlsx')
 
 if 'classifica_df' not in st.session_state:
     st.session_state.classifica_df = load_data(file_path)
@@ -74,14 +73,15 @@ if st.session_state.classifica_df.empty:
 else:
     # Mostra il DataFrame iniziale
     st.divider()
-    st.write("Classifica attuale:")
-    st.dataframe(st.session_state.classifica_df, height=560)
+    if st.button('Mostra classifica attuale'):
+        st.write("Classifica attuale:")
+        st.dataframe(st.session_state.classifica_df, height=560)
     st.divider()
 
     # Selezione del giocatore e inserimento della posizione
     nome_giocatore = st.selectbox('Seleziona il Giocatore', st.session_state.classifica_df['Giocatore'])
     posizione = st.number_input('Inserisci la posizione ottenuta nell\'ultima giornata', min_value=1, max_value=15)
-    cash = st.number_input('Inserisci il guadagno', min_value=0)
+    cash = st.number_input('Inserisci il guadagno in cash', min_value=0)
     st.divider()
 
     # Bottone per aggiornare la classifica in memoria
