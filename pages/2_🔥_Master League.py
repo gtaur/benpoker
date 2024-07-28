@@ -31,7 +31,7 @@ prefix = 'classifica_aggiornata'
 most_recent_file = f.get_most_recent_file(directory, prefix)
 
 if most_recent_file:
-    master_league_df= load_data(most_recent_file)
+    master_league_df= load_data('files/' + most_recent_file)
 else:
     master_league_df= load_data('files/Benpoker.xlsx')
 
@@ -42,3 +42,4 @@ master_league_df = f.add_col_position(master_league_df)
 st.write(master_league_df.to_html(escape=False, index=False), unsafe_allow_html=True)
 
 st.divider()
+

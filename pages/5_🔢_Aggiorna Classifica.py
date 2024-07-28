@@ -63,6 +63,7 @@ if most_recent_file:
 else:
     file_path= 'files/Benpoker.xlsx'
 
+classifica_not_session = load_data(file_path)
 
 
 if 'classifica_df' not in st.session_state:
@@ -75,7 +76,7 @@ else:
     st.divider()
     if st.button('Mostra classifica attuale'):
         st.write("Classifica attuale:")
-        st.dataframe(st.session_state.classifica_df, height=560)
+        st.dataframe(classifica_not_session, height=560)
     st.divider()
 
     # Selezione del giocatore e inserimento della posizione
