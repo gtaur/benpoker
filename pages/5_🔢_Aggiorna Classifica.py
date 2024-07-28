@@ -21,19 +21,19 @@ def aggiorna_classifica(df, nome_giocatore, posizione, cash):
         df.at[index, 'Tot Cash Vinto'] += cash
         
         if posizione in [1, 2, 3]:
-            df.at[index, 'Vittorie'] += 1
+            df.at[index, 'Podi'] += 1
         else:
             df.at[index, 'Sconfitte'] += 1
-    else:
-        nuove_statistiche = {
-            'Giocatore': nome_giocatore,
-            'PG': 1,
-            'Punti': punti,
-            'Tot Cash Vinto': cash,
-            'Vittorie': 1 if posizione in [1, 2, 3] else 0,
-            'Sconfitte': 0 if posizione in [1, 2, 3] else 1
-        }
-        df = df.append(nuove_statistiche, ignore_index=True)
+    # else:
+    #     nuove_statistiche = {
+    #         'Giocatore': nome_giocatore,
+    #         'PG': 1,
+    #         'Punti': punti,
+    #         'Tot Cash Vinto': cash,
+    #         'Podi': 1 if posizione in [1, 2, 3] else 0,
+    #         'Sconfitte': 0 if posizione in [1, 2, 3] else 1
+    #     }
+    #     df = df.append(nuove_statistiche, ignore_index=True)
     
     return df
 
@@ -53,18 +53,18 @@ def load_data(file_path):
 
 # Carica i dati
 # Trova il file più recente
-directory = 'files'
-prefix = 'classifica_aggiornata'
+# directory = 'files'
+# prefix = 'classifica_aggiornata'
 
-most_recent_file = f.get_most_recent_file(directory, prefix)
+# most_recent_file = f.get_most_recent_file(directory, prefix)
 
-if most_recent_file:
-    file_path= load_data('files/' + most_recent_file)
-else:
-    file_path= load_data('files/Benpoker.xlsx')
+# if most_recent_file:
+#     file_path= load_data('files/' + most_recent_file)
+# else:
+#     file_path= load_data('files/Benpoker.xlsx')
 
 
-
+file_path= load_data('files/Benpoker.xlsx')
 
 if 'classifica_df' not in st.session_state:
     st.session_state.classifica_df = load_data(file_path)

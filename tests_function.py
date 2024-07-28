@@ -122,3 +122,18 @@ def get_most_recent_file(directory, prefix):
             most_recent_time = file_mtime
     
     return most_recent_file
+
+
+##########
+
+directory = 'files'
+prefix = 'classifica_aggiornata'
+
+most_recent_file = get_most_recent_file(directory, prefix)
+
+if most_recent_file:
+    file_path= 'files/' + most_recent_file
+else:
+    file_path= 'files/Benpoker.xlsx'
+
+print("il filepath è:" + file_path )

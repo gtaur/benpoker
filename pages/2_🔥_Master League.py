@@ -36,5 +36,9 @@ else:
     master_league_df= load_data('files/Benpoker.xlsx')
 
 
-st.dataframe(master_league_df)
+# st.dataframe(master_league_df)
+# st.divider()
+
+st.write(master_league_df.to_html(escape=False, index=False), unsafe_allow_html=True)
+
 st.divider()
