@@ -35,6 +35,7 @@ if most_recent_file:
 else:
     classifica_df= load_data('files/Benpoker.xlsx')
 
+classifica_df = f.add_col_position(classifica_df)
 
 st.sidebar.success("Seleziona una pagina")
 

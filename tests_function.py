@@ -1,6 +1,7 @@
 import shutil
 import os
 from datetime import datetime
+import pandas as pd
 
 def sposta_file(percorso_file, destinazione):
     """
@@ -123,17 +124,35 @@ def get_most_recent_file(directory, prefix):
     
     return most_recent_file
 
+def add_col_position(df):
 
+        # Aggiungere la colonna 'Posizione' che è l'indice + 1
+    df = df.assign(Posizione=lambda x: x.index)
+    # Portare la colonna 'Posizione' davanti a tutte le altre
+    colonne = ['Posizione'] + [col for col in df.columns if col != 'Posizione']
+    df = df[colonne]
+
+    return df
 ##########
 
-directory = 'files'
-prefix = 'classifica_aggiornata'
+# directory = 'files'
+# prefix = 'classifica_aggiornata'
 
-most_recent_file = get_most_recent_file(directory, prefix)
+# most_recent_file = get_most_recent_file(directory, prefix)
 
-if most_recent_file:
-    file_path= 'files/' + most_recent_file
-else:
-    file_path= 'files/Benpoker.xlsx'
+# if most_recent_file:
+#     file_path= 'files/' + most_recent_file
+# else:
+#     file_path= 'files/Benpoker.xlsx'
 
-print("il filepath è:" + file_path )
+# print("il filepath è:" + file_path )
+
+df = pd.read_csv("files/players.csv",index_col=False,sep=";")
+
+# Aggiungere la colonna 'Posizione' che è l'indice + 1
+df = df.assign(Posizione=lambda x: x.index + 1)
+# Portare la colonna 'Posizione' davanti a tutte le altre
+colonne = ['Posizione'] + [col for col in df.columns if col != 'Posizione']
+df = df[colonne]
+
+print(df)

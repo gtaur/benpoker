@@ -35,7 +35,7 @@ if most_recent_file:
 else:
     master_league_df= load_data('files/Benpoker.xlsx')
 
-
+master_league_df = f.add_col_position(master_league_df)
 # st.dataframe(master_league_df)
 # st.divider()
 
