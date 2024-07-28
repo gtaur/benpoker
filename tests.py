@@ -25,6 +25,12 @@ def load_data(excel_file):
     return cf, ml
 
 
+def load_csv(file):
+
+    df = pd.read_csv(file,index_col=False,sep=";")
+
+    return df
+
 # Funzione per calcolare i punti in base alla posizione
 def calcola_punti(posizione):
     punti_posizione = {1: 10, 2: 8, 3: 6, 4: 3, 5: 2, 6: 1}
@@ -50,6 +56,9 @@ def aggiorna_classifica(df, nome_giocatore, posizione,cash):
 ######################################
 ############# EXECUTION ##############
 ######################################
+
+# df = load_csv("files/players.csv")
+# print(df)
 
 # Carica i dati
 classifica_df, master_league_df = load_data('files/Benpoker.xlsx')

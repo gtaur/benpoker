@@ -6,11 +6,11 @@ st.title("Players")
 @st.cache_data
 def load_data(file):
     
-    usrs = pd.read_csv(file,index_col=False)
-    usr = usrs.reset_index(drop=True)
+    usrs = pd.read_csv(file,index_col=False,sep=";")
+    #usr = usrs.reset_index(drop=True)
     
     
-    return usr
+    return usrs
 
 
 
