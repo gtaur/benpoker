@@ -8,7 +8,7 @@ st.title("Players")
 def load_data(file):
     
     usrs = pd.read_csv(file,index_col=False,sep=";")
-    #usr = usrs.reset_index(drop=True)
+    usrs = usrs.fillna('') 
     
     
     return usrs
@@ -20,7 +20,7 @@ def make_clickable(link):
     return f'<a target="_blank" href="{link}">Paypal</a>'
 
 def conditional_make_clickable(value):
-    if value != None:
+    if value != None and value != '':
         return make_clickable(value)
     return value
 
