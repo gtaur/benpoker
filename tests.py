@@ -1,4 +1,47 @@
-import pandas as pd
+#import pandas as pd
+
+import os
+from PIL import Image
+
+def ridimensiona_png(directory):
+    # Trova tutti i file PNG nella directory
+    png_files = [f for f in os.listdir(directory) if f.lower().endswith('.png')]
+    
+    # Se non ci sono file PNG nella directory, termina lo script
+    if not png_files:
+        print("Nessun file PNG trovato nella directory.")
+        return
+
+    # Inizializza le variabili per il PNG più piccolo
+    min_width, min_height = float('inf'), float('inf')
+    min_image = None
+
+    # Trova il PNG più piccolo
+    for png_file in png_files:
+        img_path = os.path.join(directory, png_file)
+        with Image.open(img_path) as img:
+            width, height = img.size
+            if width * height < min_width * min_height:
+                min_width, min_height = width, height
+                min_image = img
+
+    print(f"Il PNG più piccolo è {min_width}x{min_height}.")
+
+    # Ridimensiona tutti i PNG alle dimensioni del PNG più piccolo
+    for png_file in png_files:
+        img_path = os.path.join(directory, png_file)
+        with Image.open(img_path) as img:
+            resized_img = img.resize((min_width, min_height))
+            resized_img.save(img_path)
+            print(f"{png_file} ridimensionato a {min_width}x{min_height}.")
+
+# Specifica la directory contenente i file PNG
+directory = "foto/testsfunction"
+ridimensiona_png(directory)
+
+
+
+"""
 
 ######################################
 ############## FUNCTIONS #############
@@ -102,3 +145,5 @@ print(df_aggiornato)
 file_path = 'outputs/classifica_aggiornata.xlsx'
 df_aggiornato.to_excel(file_path, index=False)
 print(f"\nLa classifica aggiornata è stata salvata in '{file_path}'")
+
+"""
