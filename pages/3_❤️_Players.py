@@ -65,7 +65,7 @@ def show_info(selected_name, df):
 dati_utenti_df = load_data('files/players.csv')
 
 
-
+st.divider()
 ###NEW
 
 colonna1,colonna2 = st.columns(2)

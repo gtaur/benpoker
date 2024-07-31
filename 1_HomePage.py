@@ -39,7 +39,11 @@ classifica_df = f.add_col_position(classifica_df)
 
 st.sidebar.success("Seleziona una pagina")
 
+#c1, c2, c3 = st.columns(3)
 
+
+
+#with c2:
 st.title("Ben Poker")
 st.subheader("Season 3")
 st.subheader("I debiti del secondo quadrimestre")

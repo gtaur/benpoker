@@ -65,36 +65,40 @@ else:
 
 classifica_not_session = load_data(file_path)
 
+st.divider()
+c1,c2 = st.columns(2)
 
-if 'classifica_df' not in st.session_state:
-    st.session_state.classifica_df = load_data(file_path)
+with c1:
 
-if st.session_state.classifica_df.empty:
-    st.error("Impossibile caricare i dati. Assicurati che il file sia corretto e nel percorso specificato.")
-else:
-    # Mostra il DataFrame iniziale
-    st.divider()
-    if st.button('Mostra classifica attuale'):
-        st.write("Classifica attuale:")
-        st.dataframe(classifica_not_session, height=560)
-    st.divider()
+    if 'classifica_df' not in st.session_state:
+        st.session_state.classifica_df = load_data(file_path)
 
-    # Selezione del giocatore e inserimento della posizione
-    nome_giocatore = st.selectbox('Seleziona il Giocatore', st.session_state.classifica_df['Giocatore'])
-    posizione = st.number_input('Inserisci la posizione ottenuta nell\'ultima giornata', min_value=1, max_value=15)
-    cash = st.number_input('Inserisci il guadagno in cash', min_value=0)
-    st.divider()
-
-    # Bottone per aggiornare la classifica in memoria
-    if st.button('Aggiorna Classifica in modo temporaneo'):
-        st.session_state.classifica_df = aggiorna_classifica(st.session_state.classifica_df, nome_giocatore, posizione, cash)
+    if st.session_state.classifica_df.empty:
+        st.error("Impossibile caricare i dati. Assicurati che il file sia corretto e nel percorso specificato.")
+    else:
+        # Mostra il DataFrame iniziale
         
-        # Mostra il DataFrame aggiornato
-        st.write("Classifica aggiornata in memoria temporanea:")
-        st.dataframe(st.session_state.classifica_df, height=560)
+        if st.button('Mostra classifica attuale'):
+            st.write("Classifica attuale:")
+            st.dataframe(classifica_not_session, height=560)
+        st.divider()
 
-    # Bottone per salvare la classifica aggiornata
-    if st.button('Salvataggio permanente'):
-        file_aggiornato_path = f'files/classifica_aggiornata_{datetime.now().strftime("%Y%m%d_%H%M%S")}.xlsx'
-        st.session_state.classifica_df.to_excel(file_aggiornato_path,sheet_name='classifiche', index=False)
-        st.success(f"La classifica aggiornata è stata salvata come '{file_aggiornato_path}'")
+        # Selezione del giocatore e inserimento della posizione
+        nome_giocatore = st.selectbox('Seleziona il Giocatore', st.session_state.classifica_df['Giocatore'])
+        posizione = st.number_input('Inserisci la posizione ottenuta nell\'ultima giornata', min_value=1, max_value=15)
+        cash = st.number_input('Inserisci il guadagno in cash', min_value=0)
+        st.divider()
+
+        # Bottone per aggiornare la classifica in memoria
+        if st.button('Aggiorna Classifica in modo temporaneo'):
+            st.session_state.classifica_df = aggiorna_classifica(st.session_state.classifica_df, nome_giocatore, posizione, cash)
+            
+            # Mostra il DataFrame aggiornato
+            st.write("Classifica aggiornata in memoria temporanea:")
+            st.dataframe(st.session_state.classifica_df, height=560)
+
+        # Bottone per salvare la classifica aggiornata
+        if st.button('Salvataggio permanente'):
+            file_aggiornato_path = f'files/classifica_aggiornata_{datetime.now().strftime("%Y%m%d_%H%M%S")}.xlsx'
+            st.session_state.classifica_df.to_excel(file_aggiornato_path,sheet_name='classifiche', index=False)
+            st.success(f"La classifica aggiornata è stata salvata come '{file_aggiornato_path}'")

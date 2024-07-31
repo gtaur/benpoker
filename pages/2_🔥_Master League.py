@@ -41,5 +41,5 @@ master_league_df = f.add_col_position(master_league_df)
 
 st.write(master_league_df.to_html(escape=False, index=False), unsafe_allow_html=True)
 
-st.divider()
+
 
