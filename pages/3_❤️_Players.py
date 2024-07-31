@@ -28,11 +28,11 @@ def conditional_make_clickable(value):
 def carica_immagine(image_path):
     try:
         foto = Image.open("foto/" + image_path)
-        st.image(foto, caption=selected_name)
+        st.image(foto)
     except FileNotFoundError:
         # Esegui azione alternativa, ad esempio, carica un'immagine di default
         foto = Image.open("foto/default-modified.png")
-        st.image(foto, caption=selected_name)
+        st.image(foto)
     except Exception as e:
         print(f"Si è verificato un errore inaspettato: {e}")
         
@@ -40,14 +40,14 @@ def carica_immagine(image_path):
 
 def show_info(selected_name, df):
     c1, c2 = st.columns(2)
-    person_info = df[df['Username'] == selected_name].iloc[0]
+    person_info = df[df['Nome_Completo'] == selected_name].iloc[0]
     with c1:
-        st.subheader("Giocatore")
-        st.write(f"{person_info['Username']}")
         st.subheader("Nome")
         st.write(f"{person_info['Nome']}")
         st.subheader("Cognome")
         st.write(f"{person_info['Cognome']}")
+        st.subheader("Alias")
+        st.write(f"{person_info['Username']}")
         st.subheader("Urlo di battaglia")
         st.write(f"{person_info['TagLine']}")
         # Mostra il link cliccabile
@@ -73,7 +73,9 @@ colonna1,colonna2 = st.columns(2)
 if all(col in dati_utenti_df.columns for col in ['Username','Nome', 'Cognome', 'Paypal', 'TagLine']):
     # Seleziona un nome dalla lista a comparsa
     with colonna1:
-        selected_name = st.selectbox('Seleziona un giocatore', dati_utenti_df['Username'].unique())
+        # Crea una nuova colonna 'Nome Completo' concatenando 'nome' e 'cognome'
+        dati_utenti_df['Nome_Completo'] = dati_utenti_df['Nome'] + ' ' + dati_utenti_df['Cognome']
+        selected_name = st.selectbox('Seleziona un giocatore', dati_utenti_df['Nome_Completo'].unique())
     
     if selected_name:
         
