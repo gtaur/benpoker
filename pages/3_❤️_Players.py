@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from PIL import Image
 #from IPython.core.display import display, HTML
 
 st.title("Players")
@@ -24,28 +25,76 @@ def conditional_make_clickable(value):
         return make_clickable(value)
     return value
 
+def carica_immagine(image_path):
+    try:
+        foto = Image.open("foto/" + image_path)
+        st.image(foto, caption=selected_name)
+    except FileNotFoundError:
+        # Esegui azione alternativa, ad esempio, carica un'immagine di default
+        foto = Image.open("foto/default-modified.png")
+        st.image(foto, caption=selected_name)
+    except Exception as e:
+        print(f"Si è verificato un errore inaspettato: {e}")
+        
+    
+
+def show_info(selected_name, df):
+    c1, c2 = st.columns(2)
+    person_info = df[df['Username'] == selected_name].iloc[0]
+    with c1:
+        st.subheader("Giocatore")
+        st.write(f"{person_info['Username']}")
+        st.subheader("Nome")
+        st.write(f"{person_info['Nome']}")
+        st.subheader("Cognome")
+        st.write(f"{person_info['Cognome']}")
+        st.subheader("Urlo di battaglia")
+        st.write(f"{person_info['TagLine']}")
+        # Mostra il link cliccabile
+        link = person_info['Paypal']
+        st.subheader("Paypal")
+        st.markdown(f"{link}")
+    with c2:
+    # Carica e mostra l'immagine
+        image_path = person_info['Username'] + "-modified.png"
+        carica_immagine(image_path)
+
+
+#### PAGE ####
+
 dati_utenti_df = load_data('files/players.csv')
 
-# st.divider()
-# #st.dataframe(dati_utenti_df,height=560,hide_index=True)
-# #st.divider()
 
 
-# st.dataframe(
-#     dati_utenti_df,
-#     hide_index=True,
-#     height=560,
-#     column_config={
-#         "paypal": st.column_config.LinkColumn()
-#     }
+###NEW
+
+colonna1,colonna2 = st.columns(2)
+
+if all(col in dati_utenti_df.columns for col in ['Username','Nome', 'Cognome', 'Paypal', 'TagLine']):
+    # Seleziona un nome dalla lista a comparsa
+    with colonna1:
+        selected_name = st.selectbox('Seleziona un giocatore', dati_utenti_df['Username'].unique())
     
-# )
+    if selected_name:
+        
+        show_info(selected_name, dati_utenti_df)
+else:
+    st.error("Errore dati")
 
-st.divider()
 
-# paypal is the column with hyperlinks
-dati_utenti_df['Paypal'] = dati_utenti_df['Paypal'].apply(conditional_make_clickable)
 
-st.write(dati_utenti_df.to_html(escape=False, index=False), unsafe_allow_html=True)
 
-st.divider()
+
+##OLD
+
+# dati_utenti_df['Paypal'] = dati_utenti_df['Paypal'].apply(conditional_make_clickable)
+
+
+# st.divider()
+
+# # paypal is the column with hyperlinks
+
+
+# st.write(dati_utenti_df.to_html(escape=False, index=False), unsafe_allow_html=True)
+
+# st.divider()

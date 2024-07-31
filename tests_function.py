@@ -133,7 +133,13 @@ def add_col_position(df):
     df = df[colonne]
 
     return df
-##########
+
+
+
+
+########################################
+############### TEST FX ################
+########################################
 
 # directory = 'files'
 # prefix = 'classifica_aggiornata'
