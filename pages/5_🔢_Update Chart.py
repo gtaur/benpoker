@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from datetime import datetime
+from datetime import date,datetime
 import tests_function as f
 
 st.title('Aggiorna Classifica')
@@ -24,18 +24,34 @@ def aggiorna_classifica(df, nome_giocatore, posizione, cash):
             df.at[index, 'Podi'] += 1
         else:
             df.at[index, 'Sconfitte'] += 1
-    # else:
-    #     nuove_statistiche = {
-    #         'Giocatore': nome_giocatore,
-    #         'PG': 1,
-    #         'Punti': punti,
-    #         'Tot Cash Vinto': cash,
-    #         'Podi': 1 if posizione in [1, 2, 3] else 0,
-    #         'Sconfitte': 0 if posizione in [1, 2, 3] else 1
-    #     }
-    #     df = df.append(nuove_statistiche, ignore_index=True)
     
     return df
+
+def aggiorna_match_day(df,nome_giocatore, posizione,data):
+
+    message = True
+    lt_idx = df.index[-1]
+
+    if df.at[lt_idx,"data"] == "":
+        df.at[lt_idx,"data"] = data.strftime("%d/%m/%Y")
+
+    if (df.iloc[lt_idx] == nome_giocatore).any(): #controlli
+        message=False
+    else: 
+        if df.at[lt_idx,str(posizione)] == "":
+            df.at[lt_idx,str(posizione)] = nome_giocatore
+        else:
+            message=False
+
+
+    print("\n \n")
+    print(df.iloc[lt_idx])
+    print("\n \n")
+    print(nome_giocatore)
+
+    return df,message
+
+
 
 # Carica i dati (simulato per l'esempio)
 @st.cache_data
@@ -56,6 +72,7 @@ def load_data(file_path):
 directory = 'files'
 prefix = 'classifica_aggiornata'
 
+
 most_recent_file = f.get_most_recent_file(directory, prefix)
 
 if most_recent_file:
@@ -65,13 +82,27 @@ else:
 
 classifica_not_session = load_data(file_path)
 
+
+# Carica il file CSV esistente DELLE PARTITE
+matches_file_path = 'files/matches.csv'
+mm_df = pd.read_csv(matches_file_path, sep=';')
+
+# Creare una riga vuota
+empty_row = pd.DataFrame([[''] * len(mm_df.columns)], columns=mm_df.columns)
+
+mm_df = pd.concat([mm_df, empty_row], ignore_index=True)
+
 st.divider()
 c1,c2 = st.columns(2)
 
 with c1:
 
+#inizializza sessione
     if 'classifica_df' not in st.session_state:
         st.session_state.classifica_df = load_data(file_path)
+    if 'mm_df' not in st.session_state:
+        st.session_state.mm_df = mm_df
+        
 
     if st.session_state.classifica_df.empty:
         st.error("Impossibile caricare i dati. Assicurati che il file sia corretto e nel percorso specificato.")
@@ -83,7 +114,8 @@ with c1:
             st.dataframe(classifica_not_session, height=560)
         st.divider()
 
-        # Selezione del giocatore e inserimento della posizione
+        # Selezione del giocatore e inserimento della posizione ----ACQUISIZIONE DEI DATI
+        giorno_match = st.date_input('Inserisci la data della partita', min_value=date(2000, 1, 1), max_value=date.today())
         nome_giocatore = st.selectbox('Seleziona il Giocatore', st.session_state.classifica_df['Giocatore'])
         posizione = st.number_input('Inserisci la posizione ottenuta nell\'ultima giornata', min_value=1, max_value=15)
         cash = st.number_input('Inserisci il guadagno in cash', min_value=0)
@@ -91,14 +123,32 @@ with c1:
 
         # Bottone per aggiornare la classifica in memoria
         if st.button('Aggiorna Classifica in modo temporaneo'):
-            st.session_state.classifica_df = aggiorna_classifica(st.session_state.classifica_df, nome_giocatore, posizione, cash)
-            
-            # Mostra il DataFrame aggiornato
-            st.write("Classifica aggiornata in memoria temporanea:")
-            st.dataframe(st.session_state.classifica_df, height=560)
+
+            st.session_state.mm_df,mex = aggiorna_match_day(st.session_state.mm_df, nome_giocatore, posizione, giorno_match)
+            if mex == False:
+                st.error("Posizione o Giocatore già inseriti.")
+                st.table(st.session_state.mm_df)
+            else:
+                st.session_state.classifica_df = aggiorna_classifica(st.session_state.classifica_df, nome_giocatore, posizione, cash)
+                
+                # Mostra il DataFrame aggiornato della partita corrente:
+                st.write("Partita corrente aggiornata in memoria temporanea:")
+                st.table(st.session_state.mm_df)
+                # Mostra il DataFrame aggiornato della classifica generale
+                st.write("Classifica aggiornata in memoria temporanea:")
+                st.dataframe(st.session_state.classifica_df, height=560)
+
+
 
         # Bottone per salvare la classifica aggiornata
         if st.button('Salvataggio permanente'):
+
             file_aggiornato_path = f'files/classifica_aggiornata_{datetime.now().strftime("%Y%m%d_%H%M%S")}.xlsx'
             st.session_state.classifica_df.to_excel(file_aggiornato_path,sheet_name='classifiche', index=False)
             st.success(f"La classifica aggiornata è stata salvata come '{file_aggiornato_path}'")
+
+            #salva il singolo giorno
+            st.session_state.mm_df.to_csv(matches_file_path,sep=";", index=False)
+            st.success("Partita salvata nello storico")
+
+

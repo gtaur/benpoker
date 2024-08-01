@@ -1,7 +1,22 @@
 import shutil
 import os
 from datetime import datetime
+from datetime import date
 import pandas as pd
+
+
+
+def load_data_xl(excel_file):
+    # Carica i dati dal file Excel
+    xl = pd.ExcelFile(excel_file)
+    
+    # Supponiamo che il primo foglio contenga i dati di classifica e master league
+    classifica_df = xl.parse(sheet_name='classifiche',index_col=False)
+    classifica_df = classifica_df.sort_values(by='Punti', ascending=False)
+    cfx = classifica_df.drop(['MasterLeague'],axis=1)
+    cf = cfx.reset_index(drop=True)
+    cf.index = cf.index + 1
+    return cf
 
 def sposta_file(percorso_file, destinazione):
     """
@@ -29,7 +44,6 @@ def sposta_file(percorso_file, destinazione):
     
     except Exception as e:
         print(f"Errore: {e}")
-
 
 def sposta_e_rinomina_file(percorso_file_sorgente, percorso_directory_destinazione):
     """
@@ -61,8 +75,6 @@ def sposta_e_rinomina_file(percorso_file_sorgente, percorso_directory_destinazio
 
     return percorso_file_destinazione
 
-
-
 def rinomina_file_con_timestamp(percorso_file):
     """
     Rinomina un file aggiungendo un timestamp al nome del file.
@@ -91,14 +103,6 @@ def rinomina_file_con_timestamp(percorso_file):
     
     except Exception as e:
         print(f"Errore: {e}")
-
-# Esempio di utilizzo della funzione
-
-# percorso_file_sorgente = 'tests/asd.txt'
-# percorso_directory_destinazione = 'tests/prova/'
-
-# percorso_file_nuovo = sposta_e_rinomina_file(percorso_file_sorgente, percorso_directory_destinazione)
-# print(f"File spostato e rinominato in: {percorso_file_nuovo}")
 
 def get_most_recent_file(directory, prefix):
     # Elenco di tutti i file nella directory specificata
@@ -134,31 +138,98 @@ def add_col_position(df):
 
     return df
 
+def rimuovi_elemento(lista):
+  print("Lista di tutti i giocatori: \n")
+  for elemento in lista:
+    print(elemento)
+  print("\n")
+  risposta = input("Vuoi rimuovere un giocatore? (sì/no): ").lower()
+  if risposta == "sì":
+    elemento_da_rimuovere = input("Quale elemento vuoi rimuovere? ")
+    if elemento_da_rimuovere in lista:
+      lista.remove(elemento_da_rimuovere)
+      print("Elemento rimosso con successo!")
+    else:
+      print("L'elemento specificato non è presente nella lista.")
+  elif risposta == "no":
+    print("Nessun elemento rimosso.")
+  else:
+    print("Risposta non valida. Riprova.")
 
+def create_tables(list):
+    lista_pari = []
+    lista_dispari = []
+   
+    for indice, valore in enumerate(list):
+        if indice % 2 == 0:
+            lista_pari.append(valore)
+        else:
+            lista_dispari.append(valore)
 
+    return lista_pari,lista_dispari
+
+def sposta_key_dict_in_cima(chiave_da_spostare,dizionario):
+   if chiave_da_spostare in dizionario:
+    # Estrai il valore della chiave da spostare
+    valore_da_spostare = dizionario.pop(chiave_da_spostare)
+    
+    # Ricostruisci il dizionario con la chiave spostata in cima
+    dizionario = {chiave_da_spostare: valore_da_spostare, **dizionario}
+    
+
+    return dizionario
 
 ########################################
 ############### TEST FX ################
 ########################################
 
-# directory = 'files'
-# prefix = 'classifica_aggiornata'
+""" 
+classifica_df = load_data_xl("files/classifica_aggiornata_20240728_182339.xlsx")
 
-# most_recent_file = get_most_recent_file(directory, prefix)
+cldf = classifica_df
 
-# if most_recent_file:
-#     file_path= 'files/' + most_recent_file
-# else:
-#     file_path= 'files/Benpoker.xlsx'
+cldf.sort_values(by='Punti', ascending=False)
+# Visualizza il DataFrame
+print("DataFrame:")
+print(cldf)
 
-# print("il filepath è:" + file_path )
+# Creazione del dizionario con l'indice come chiave e Giocatore come valore
+dizionario = cldf['Giocatore'].to_dict()
 
-df = pd.read_csv("files/players.csv",index_col=False,sep=";")
+print("\nDizionario:")
+print(dizionario)
 
-# Aggiungere la colonna 'Posizione' che è l'indice + 1
-df = df.assign(Posizione=lambda x: x.index + 1)
-# Portare la colonna 'Posizione' davanti a tutte le altre
-colonne = ['Posizione'] + [col for col in df.columns if col != 'Posizione']
-df = df[colonne]
+today = date.today()
 
-print(df)
+dizionario['data'] = today
+
+print(dizionario)
+
+
+dictupdated = sposta_key_dict_in_cima("data",dizionario)
+
+print(dictupdated)
+
+
+# Carica il file CSV esistente
+matches_file_path = 'files/matches_test.csv'
+mm_df = pd.read_csv(matches_file_path, sep=';')
+
+# Creare una riga vuota
+empty_row = pd.DataFrame([[''] * len(mm_df.columns)], columns=mm_df.columns)
+
+mm_df = pd.concat([mm_df, empty_row], ignore_index=True)
+
+print(mm_df)
+
+last_index = mm_df.index[-1]
+
+mm_df.at[last_index, 'data'] = dictupdated["data"].strftime("%d/%m/%Y")
+for i in range(1, 16):
+   mm_df.at[last_index, str(i)] = dictupdated[i]
+
+print(mm_df)
+
+mm_df.to_csv('files/matches_test.csv', sep=';', index=False)
+
+"""

@@ -52,3 +52,4 @@ st.subheader("Classifica Generale")
 #st.dataframe(classifica_df,height=560)  
 #st.divider()
 st.write(classifica_df.to_html(escape=False, index=False), unsafe_allow_html=True)
+
