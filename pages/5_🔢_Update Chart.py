@@ -31,13 +31,14 @@ def aggiorna_match_day(df,nome_giocatore, posizione,data):
 
     message = True
     lt_idx = df.index[-1]
-    #penultimo_index = df.index[-2]
+    penultimo_index = df.index[-2]
 
     #trova e inserisci giorno match:
-   # n_giornata = df.at[penultimo_index,"matchday"] + 1
 
-    #if df.at[lt_idx,"matchday"] == "":
-       # df.at[lt_idx,"matchday"] == n_giornata
+    n_giornata = int(df.at[penultimo_index,"matchday"]) + 1
+
+    if df.at[lt_idx,"matchday"] == "":
+       df.at[lt_idx,"matchday"] == str(n_giornata)
 
     if df.at[lt_idx,"data"] == "":
         df.at[lt_idx,"data"] = data.strftime("%d/%m/%Y")
@@ -140,7 +141,7 @@ with c1:
                 
                 # Mostra il DataFrame aggiornato della partita corrente:
                 st.write("Partita corrente aggiornata in memoria temporanea:")
-                st.table(st.session_state.mm_df)
+                st.dataframe(st.session_state.mm_df)
                 # Mostra il DataFrame aggiornato della classifica generale
                 st.write("Classifica aggiornata in memoria temporanea:")
                 st.dataframe(st.session_state.classifica_df, height=560)
@@ -152,7 +153,7 @@ with c1:
 
             file_aggiornato_path = f'files/classifica_aggiornata_{datetime.now().strftime("%Y%m%d_%H%M%S")}.xlsx'
             st.session_state.classifica_df.to_excel(file_aggiornato_path,sheet_name='classifiche', index=False)
-            st.success(f"La classifica aggiornata è stata salvata come '{file_aggiornato_path}'")
+            st.success(f"La classifica è stata aggiornata")
 
             #salva il singolo giorno
             st.session_state.mm_df.to_csv(matches_file_path,sep=";", index=False)
