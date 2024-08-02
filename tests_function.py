@@ -179,7 +179,35 @@ def sposta_key_dict_in_cima(chiave_da_spostare,dizionario):
 
     return dizionario
 
-########################################
+def load_data_master_l(excel_file):
+    # Carica i dati dal file Excel
+    xl = pd.ExcelFile(excel_file)
+    
+    # Supponiamo che il primo foglio contenga i dati di classifica e master league
+    classifica_df = xl.parse(sheet_name='classifiche',index_col=False)
+    # Filtriamo il DataFrame per mantenere solo le righe in cui master legue  è 1
+    master_league_df = classifica_df[classifica_df['MasterLeague'] != 0]
+    master_league_df = master_league_df.sort_values(by='Punti',ascending=False)
+    mlx = master_league_df.drop(['MasterLeague'],axis=1)
+    ml = mlx.reset_index(drop=True)
+    ml.index = ml.index + 1
+
+    
+    return ml
+
+def load_data_home(excel_file):
+    # Carica i dati dal file Excel
+    xl = pd.ExcelFile(excel_file)
+    
+    # Supponiamo che il primo foglio contenga i dati di classifica e master league
+    classifica_df = xl.parse(sheet_name='classifiche',index_col=False)
+    classifica_df = classifica_df.sort_values(by='Punti', ascending=False)
+    cfx = classifica_df.drop(['MasterLeague'],axis=1)
+    cf = cfx.reset_index(drop=True)
+    cf.index = cf.index + 1
+    return cf
+
+#######################################
 ############### TEST FX ################
 ########################################
 

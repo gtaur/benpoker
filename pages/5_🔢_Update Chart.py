@@ -31,11 +31,13 @@ def aggiorna_match_day(df,nome_giocatore, posizione,data):
 
     message = True
     lt_idx = df.index[-1]
+    #penultimo_index = df.index[-2]
 
     #trova e inserisci giorno match:
-    n_giornata = df.at[lt_idx-2] + 1
-    if df.at[lt_idx,"matchday"] == "":
-        df.at[lt_idx,"matchday"] == n_giornata
+   # n_giornata = df.at[penultimo_index,"matchday"] + 1
+
+    #if df.at[lt_idx,"matchday"] == "":
+       # df.at[lt_idx,"matchday"] == n_giornata
 
     if df.at[lt_idx,"data"] == "":
         df.at[lt_idx,"data"] = data.strftime("%d/%m/%Y")

@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from PIL import Image
+import tests_function as f
 #from IPython.core.display import display, HTML
 
 st.title("Players")
@@ -40,7 +41,7 @@ def carica_immagine(image_path):
 
 def show_info(selected_name, df):
     c1, c2 = st.columns(2)
-    person_info = df[df['Nome_Completo'] == selected_name].iloc[0]
+    person_info = df[df['Giocatore'] == selected_name].iloc[0]
     with c1:
         st.subheader("Nome")
         st.write(f"{person_info['Nome']}")
@@ -58,28 +59,48 @@ def show_info(selected_name, df):
     # Carica e mostra l'immagine
         image_path = person_info['Username'] + "-modified.png"
         carica_immagine(image_path)
+        
+        st.subheader("Stats")
+        st.write(f"Partite Giocate: {person_info['PG']}")
+        st.write(f"Podi: {person_info['Podi']}")
+        st.write(f"Sconfitte: {person_info['Sconfitte']}")
+        st.write(f"Guadagno: {person_info['Tot Cash Vinto']} €")
+
+
+
+# Specifica la directory in cui cercare il file e il prefisso
+directory = 'files'
+prefix = 'classifica_aggiornata'
+
+# Trova il file più recente
+most_recent_file = f.get_most_recent_file(directory, prefix)
+
+
+
+dati_utenti_df = load_data('files/players.csv')
+dati_utenti_df['Giocatore'] = dati_utenti_df['Nome'] + ' ' + dati_utenti_df['Cognome']
+
+df_classifica = f.load_data_home("files/" + most_recent_file)
+
+dati_utenti_df_merged = pd.merge(dati_utenti_df, df_classifica, on='Giocatore', how='inner')
 
 
 #### PAGE ####
-
-dati_utenti_df = load_data('files/players.csv')
-
-
 st.divider()
 ###NEW
 
 colonna1,colonna2 = st.columns(2)
 
-if all(col in dati_utenti_df.columns for col in ['Username','Nome', 'Cognome', 'Paypal', 'TagLine']):
+if all(col in dati_utenti_df_merged.columns for col in ['Giocatore','Nome', 'Cognome', 'Paypal', 'TagLine','PG','Podi','Tot Cash Vinto','Sconfitte']):
     # Seleziona un nome dalla lista a comparsa
     with colonna1:
         # Crea una nuova colonna 'Nome Completo' concatenando 'nome' e 'cognome'
-        dati_utenti_df['Nome_Completo'] = dati_utenti_df['Nome'] + ' ' + dati_utenti_df['Cognome']
-        selected_name = st.selectbox('Seleziona un giocatore', dati_utenti_df['Nome_Completo'].unique())
+        #dati_utenti_df['Nome_Completo'] = dati_utenti_df['Nome'] + ' ' + dati_utenti_df['Cognome']
+        selected_name = st.selectbox('Seleziona un giocatore', dati_utenti_df_merged['Giocatore'].unique())
     
     if selected_name:
         
-        show_info(selected_name, dati_utenti_df)
+        show_info(selected_name, dati_utenti_df_merged)
 else:
     st.error("Errore dati")
 
@@ -87,16 +108,3 @@ else:
 
 
 
-##OLD
-
-# dati_utenti_df['Paypal'] = dati_utenti_df['Paypal'].apply(conditional_make_clickable)
-
-
-# st.divider()
-
-# # paypal is the column with hyperlinks
-
-
-# st.write(dati_utenti_df.to_html(escape=False, index=False), unsafe_allow_html=True)
-
-# st.divider()
