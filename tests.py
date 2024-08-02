@@ -41,65 +41,20 @@ ridimensiona_png(directory)
 
 
 
-"""
-
-######################################
-############## FUNCTIONS #############
-######################################
-
-def load_data(excel_file):
-    # Carica i dati dal file Excel
-    xl = pd.ExcelFile(excel_file)
-    
-    # Supponiamo che il primo foglio contenga i dati di classifica e master league
-    classifica_df = xl.parse(sheet_name='classifiche',index_col=False)
-    classifica_df = classifica_df.sort_values(by='Punti', ascending=False)
-    cfx = classifica_df.drop(['MasterLeague'],axis=1)
-    cf = cfx.reset_index(drop=True)
-    cf.index = cf.index + 1
-    # Filtriamo il DataFrame per mantenere solo le righe in cui master legue  è 1
-    master_league_df = classifica_df[classifica_df['MasterLeague'] != 0]
-    master_league_df = master_league_df.sort_values(by='Punti',ascending=False)
-    mlx = master_league_df.drop(['MasterLeague'],axis=1)
-    ml = mlx.reset_index(drop=True)
-    ml.index = ml.index + 1
 
 
-    return cf, ml
 
-
-def load_csv(file):
-
-    df = pd.read_csv(file,index_col=False,sep=";")
-
-    return df
-
-# Funzione per calcolare i punti in base alla posizione
-def calcola_punti(posizione):
-    punti_posizione = {1: 10, 2: 8, 3: 6, 4: 3, 5: 2, 6: 1}
-    return punti_posizione.get(posizione, 0)
-
-# Funzione per aggiornare il DataFrame
-def aggiorna_classifica(df, nome_giocatore, posizione,cash):
-    punti = calcola_punti(posizione)
-    
-    if nome_giocatore in df['Giocatore'].values:
-        index = df.index[df['Giocatore'] == nome_giocatore].tolist()[0]
-        df.at[index, 'PG'] += 1
-        df.at[index, 'Punti'] += punti
-        df.at[index, 'Tot Cash vinto'] += cash
-        
-        if posizione == 1 or posizione == 2 or posizione == 3:
-            df.at[index, 'Vittorie'] += 1
-        else:
-            df.at[index, 'Sconfitte'] += 1
-    
-    return df
 
 ######################################
 ############# EXECUTION ##############
 ######################################
 
+
+
+
+
+
+"""
 # df = load_csv("files/players.csv")
 # print(df)
 

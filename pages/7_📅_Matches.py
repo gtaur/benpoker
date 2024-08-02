@@ -19,9 +19,10 @@ df = load_data("files/matches.csv")
 
 for index, row in df.iterrows():
     #st.write(f"Nome: {row['nome']}, Cognome: {row['cognome']}, Età: {row['età']}")
-    st.subheader(f"Data: {row['data']}")
+    st.subheader(f"{row['matchday']} Giornata ({row['data']})")
     df_riga = pd.DataFrame([row])
     df_riga = df_riga.drop(['data'],axis=1)
+    df_riga = df_riga.drop(['matchday'],axis=1)
     #df_riga = df_riga.reset_index(inplace=True)
     
     df_riga_df_reset = df_riga.reset_index(drop=True)
