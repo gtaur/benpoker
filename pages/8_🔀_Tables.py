@@ -2,7 +2,13 @@ import streamlit as st
 import pandas as pd
 import tests_function as f
 
-st.title("Generazione Tavoli")
+
+a1,a2,a3 = st.columns(3)
+
+with a2:
+
+    st.title("Generazione Tavoli")
+    
 st.divider()
 
 c1,c2,c3 = st.columns(3)

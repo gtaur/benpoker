@@ -3,7 +3,11 @@ import pandas as pd
 from datetime import date,datetime
 import tests_function as f
 
-st.title('Aggiorna Classifica')
+a1,a2,a3 = st.columns(3)
+
+with a2:
+
+    st.title('Aggiorna Classifica')
 
 # Funzione per calcolare i punti in base alla posizione
 def calcola_punti(posizione):
@@ -101,9 +105,9 @@ empty_row = pd.DataFrame([[''] * len(mm_df.columns)], columns=mm_df.columns)
 mm_df = pd.concat([mm_df, empty_row], ignore_index=True)
 
 st.divider()
-c1,c2 = st.columns(2)
+c1,c2,c3 = st.columns(3)
 
-with c1:
+with c2:
 
 #inizializza sessione
     if 'classifica_df' not in st.session_state:

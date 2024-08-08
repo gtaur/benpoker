@@ -3,8 +3,11 @@ import pandas as pd
 from PIL import Image
 import tests_function as f
 #from IPython.core.display import display, HTML
+a1,a2,a3 = st.columns(3)
 
-st.title("Players")
+with a2:
+
+    st.title("Players")
 
 @st.cache_data
 def load_data(file):

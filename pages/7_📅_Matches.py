@@ -4,9 +4,10 @@ import tests_function as f
 
 
 
+a1,a2,a3 = st.columns(3)
 
-        
-st.title("Partite Passate")
+with a2:
+    st.title("Partite Passate")
 st.divider()
 
 @st.cache_data

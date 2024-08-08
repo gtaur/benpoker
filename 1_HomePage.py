@@ -39,15 +39,23 @@ classifica_df = f.add_col_position(classifica_df)
 
 st.sidebar.success("Seleziona una pagina")
 
+
+a1,a2,a3 = st.columns(3)
+
+with a2:
+    st.title("Ben Poker")
+    st.subheader("Season 3")
+    st.subheader("I debiti del secondo quadrimestre")
+    
+st.divider()
+
 c1, c2, c3 = st.columns(3)
 
 classifica_df = classifica_df.drop(['Sconfitte','PG','Tot Cash Vinto','Podi'],axis=1)
 
 with c2:
-    st.title("Ben Poker")
-    st.subheader("Season 3")
-    st.subheader("I debiti del secondo quadrimestre")
-    st.divider()
+
+
     st.subheader("Classifica Generale")
     #st.dataframe(classifica_df,height=560)  
     #st.divider()

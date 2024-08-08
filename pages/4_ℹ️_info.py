@@ -1,6 +1,10 @@
 import streamlit as st
 
-st.title("Info")
+a1,a2,a3 = st.columns(3)
+
+with a2:
+
+    st.title("Info")
 st.divider()
 c1,c2= st.columns(2)
 with c1:
