@@ -99,7 +99,7 @@ if all(col in dati_utenti_df_merged.columns for col in ['Giocatore','Nome', 'Cog
     with colonna1:
         # Crea una nuova colonna 'Nome Completo' concatenando 'nome' e 'cognome'
         #dati_utenti_df['Nome_Completo'] = dati_utenti_df['Nome'] + ' ' + dati_utenti_df['Cognome']
-        selected_name = st.selectbox('Seleziona un giocatore', dati_utenti_df_merged['Giocatore'].unique())
+        selected_name = st.selectbox('Seleziona un giocatore', dati_utenti_df_merged['Giocatore'].sort_values().unique())
     
     if selected_name:
         

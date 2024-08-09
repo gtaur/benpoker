@@ -23,12 +23,15 @@ most_recent_file = f.get_most_recent_file(directory, prefix)
 df = f.load_data_xl('files/' + most_recent_file)
 
 # Converti la colonna 'Giocatore' in una lista
-players = df['Giocatore'].tolist()
+
+players = df['Giocatore'].tolist().sort()
 
 # Funzione per aggiornare la lista dei giocatori
 def update_players(selected_player):
     if selected_player in st.session_state['players']:
         st.session_state['players'].remove(selected_player)
+
+### exe
 
 # Inizializza la session state
 if 'players' not in st.session_state:

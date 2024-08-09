@@ -128,7 +128,7 @@ with c2:
 
         # Selezione del giocatore e inserimento della posizione ----ACQUISIZIONE DEI DATI
         giorno_match = st.date_input('Inserisci la data della partita', min_value=date(2000, 1, 1), max_value=date.today())
-        nome_giocatore = st.selectbox('Seleziona il Giocatore', st.session_state.classifica_df['Giocatore'])
+        nome_giocatore = st.selectbox('Seleziona il Giocatore', st.session_state.classifica_df['Giocatore'].sort_values())
         posizione = st.number_input('Inserisci la posizione ottenuta nell\'ultima giornata', min_value=1, max_value=15)
         cash = st.number_input('Inserisci il guadagno in cash', min_value=0)
         st.divider()
