@@ -99,11 +99,18 @@ classifica_not_session = load_data(file_path)
 matches_file_path = 'files/matches.csv'
 mm_df = pd.read_csv(matches_file_path, sep=';')
 
-# Creare una riga vuota
-empty_row = pd.DataFrame([[''] * len(mm_df.columns)], columns=mm_df.columns)
 
+# Creare una riga vuota
+#empty_row = pd.DataFrame([[''] * len(mm_df.columns)], columns=mm_df.columns)
+
+# Crea una nuova riga con valori di default e tipo di dato stringa per tutte le colonne
+empty_row = pd.DataFrame({col: pd.Series([''], dtype=str) for col in mm_df.columns})
+
+# Aggiungi la nuova riga al DataFrame esistente
 mm_df = pd.concat([mm_df, empty_row], ignore_index=True)
 
+
+#page
 st.divider()
 c1,c2,c3 = st.columns(3)
 
