@@ -6,7 +6,7 @@ with a2:
 
     st.title("Info")
 st.divider()
-c1,c2= st.columns(2)
+c1,c2,c3= st.columns(3)
 with c1:
     st.subheader("Codice box chiavi:")
     st.write("7020")
@@ -31,3 +31,13 @@ with c2:
     2000-4000 \n \n
     3000-6000 \n \n
     5000-10.000""")
+
+with c3:
+    st.subheader("Punti per posizione")
+    st.write(""" \n \n 
+   10 punti al 1° Classificato \n \n
+    8 punti al 2°  Classificato \n \n
+    6 punti al 3°  Classificato \n \n
+    3 punti al 4°  Classificato \n \n
+    2 punti al 5°  Classificato \n \n
+    1 punto al 6°  Classificato""")
