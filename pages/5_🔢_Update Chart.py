@@ -237,7 +237,7 @@ with c2:
             #file_aggiornato_path = f'files/classifica_aggiornata_{datetime.now().strftime("%Y%m%d_%H%M%S")}.xlsx'  <-------------------
             #st.session_state.classifica_df.to_excel(file_aggiornato_path,sheet_name='classifiche', index=False) <-------------------
             #con mongo
-            f.aggiorna_player_da_dataframe_su_mdb(test_coll,st.session_state.classifica_df)  #### !!!!!! uso collection temp per fare i test !!!!!!!!!!!!!
+            f.aggiorna_player_da_dataframe_su_mdb(collection,st.session_state.classifica_df)  #### !!!!!! uso collection temp per fare i test !!!!!!!!!!!!!
 
             st.success(f"La classifica è stata aggiornata")
 
