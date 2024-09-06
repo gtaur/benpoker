@@ -2,6 +2,17 @@ import streamlit as st
 import pandas as pd
 import tests_function as f
 
+#mongo connection
+collection=f.mongo_conn('classifica')
+
+### CONVERTI COLLECTION IN DATAFRAME ###
+df = f.coll_to_df(collection)
+
+#aggiusta il df
+df = f.load_chart_mdb(df)
+
+
+#######################
 st.set_page_config(
     page_title="Home",
     layout="wide",
@@ -35,7 +46,14 @@ if most_recent_file:
 else:
     classifica_df= load_data('files/Benpoker.xlsx')
 
+#commenta per non usare mongo ma il file
+classifica_df = df
+#aggiunge colonna pos
 classifica_df = f.add_col_position(classifica_df)
+
+
+
+
 
 st.sidebar.success("Seleziona una pagina")
 

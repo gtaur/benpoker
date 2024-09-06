@@ -2,6 +2,16 @@ import streamlit as st
 import pandas as pd
 import tests_function as f
 
+#mongo connection
+collection=f.mongo_conn('matches')
+
+### CONVERTI COLLECTION IN DATAFRAME ###
+df = f.coll_to_df(collection)
+#aggiusta il df
+df = df.drop(['_id'],axis=1)
+df = df.fillna('') 
+df = df.reset_index(drop=True)
+
 
 
 a1,a2,a3 = st.columns(3)
@@ -20,7 +30,8 @@ def load_data(file):
     
     return usrs
 
-df = load_data("files/matches.csv")
+#scommenta se vuoi usare il file
+#df = load_data("files/matches.csv")
 
 c1,c2,c3 = st.columns(3)
 

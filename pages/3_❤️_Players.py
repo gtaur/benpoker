@@ -3,6 +3,22 @@ import pandas as pd
 from PIL import Image
 import tests_function as f
 #from IPython.core.display import display, HTML
+
+#mongo connection
+collection=f.mongo_conn('players')
+collection_2=f.mongo_conn('classifica')
+
+### CONVERTI COLLECTION IN DATAFRAME ###
+df = f.coll_to_df(collection)
+
+df = df.fillna('')
+df = df.drop(['_id'],axis=1)
+
+df2 = f.coll_to_df(collection_2)
+
+df2 = f.load_chart_mdb(df2)
+
+
 a1,a2,a3 = st.columns(3)
 
 with a2:
@@ -78,12 +94,19 @@ prefix = 'classifica_aggiornata'
 # Trova il file più recente
 most_recent_file = f.get_most_recent_file(directory, prefix)
 
+#scommenta per usare il file
+#dati_utenti_df = load_data('files/players.csv')
 
+#mongo
+dati_utenti_df = df
 
-dati_utenti_df = load_data('files/players.csv')
 dati_utenti_df['Giocatore'] = dati_utenti_df['Nome'] + ' ' + dati_utenti_df['Cognome']
 
-df_classifica = f.load_data_home("files/" + most_recent_file)
+#print(dati_utenti_df)
+#scommenta per usare il file
+#df_classifica = f.load_data_home("files/" + most_recent_file)
+
+df_classifica = df2
 
 dati_utenti_df_merged = pd.merge(dati_utenti_df, df_classifica, on='Giocatore', how='inner')
 

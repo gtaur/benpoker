@@ -4,6 +4,14 @@ import tests_function as f
 
 
 # Carica i dati
+#mongo connection
+collection=f.mongo_conn('classifica')
+
+### CONVERTI COLLECTION IN DATAFRAME ###
+df = f.coll_to_df(collection)
+#aggiusta il df
+df = f.load_ml_mdb(df)
+
 # Specifica la directory in cui cercare il file e il prefisso
 directory = 'files'
 prefix = 'classifica_aggiornata'
@@ -16,6 +24,9 @@ if most_recent_file:
 else:
     master_league_df= f.load_data_master_l('files/Benpoker.xlsx')
 
+#commenta se vuoi usare il file
+master_league_df = df
+#colonna posizione
 master_league_df = f.add_col_position(master_league_df)
 # st.dataframe(master_league_df)
 # st.divider()
