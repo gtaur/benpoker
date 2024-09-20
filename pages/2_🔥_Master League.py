@@ -12,17 +12,7 @@ df = f.coll_to_df(collection)
 #aggiusta il df
 df = f.load_ml_mdb(df)
 
-# Specifica la directory in cui cercare il file e il prefisso
-directory = 'files'
-prefix = 'classifica_aggiornata'
 
-# Trova il file più recente
-most_recent_file = f.get_most_recent_file(directory, prefix)
-
-if most_recent_file:
-    master_league_df= f.load_data_master_l('files/' + most_recent_file)
-else:
-    master_league_df= f.load_data_master_l('files/Benpoker.xlsx')
 
 #commenta se vuoi usare il file
 master_league_df = df

@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
-from datetime import date,datetime
+from datetime import date
+import datetime
 import tests_function as f
 
 a1,a2,a3 = st.columns(3)
@@ -63,20 +64,8 @@ def aggiorna_match_day(df,nome_giocatore, posizione,data):
 
     return df,message
 
-
 # Carica i dati 
 @st.cache_data
-def load_data(file_path):
-    try:
-        # Carica i dati da file Excel (modifica il percorso come necessario)
-        classifica_df = pd.read_excel(file_path, sheet_name='classifiche', index_col=False)
-        classifica_df = classifica_df.sort_values(by='Punti', ascending=False)
-        cf = classifica_df.reset_index(drop=True)
-        cf.index = cf.index + 1
-        return cf
-    except Exception as e:
-        st.error(f"Errore nel caricamento dei dati: {e}")
-        return pd.DataFrame()
     
 def load_data_no_file(dataf):
         
@@ -111,39 +100,12 @@ mongo_matches = f.coll_to_df(collection_2)
 
 #######
 # connesione a collection temp per i test
-test_coll=f.mongo_conn('test')
+#test_coll=f.mongo_conn('test')
 
 ########
 
 
-
-# Trova il file più recente
-directory = 'files'
-prefix = 'classifica_aggiornata'
-
-
-most_recent_file = f.get_most_recent_file(directory, prefix)
-
-if most_recent_file:
-    file_path='files/' + most_recent_file
-else:
-    file_path= 'files/Benpoker.xlsx'
-
-
-#con file - scommenta se vuoi usare il file
-#classifica_not_session = load_data(file_path)
-
-#con mongo      < --------------------------------------------------------
 classifica_not_session = load_data_no_file(mongo_df_cl)
-
-
-# Carica il file CSV esistente DELLE PARTITE
-
-#Tramite file:
-# matches_file_path = 'files/matches.csv'
-# mm_df = pd.read_csv(matches_file_path, sep=';')
-
-# tramite mongo     <-----------------------------------------------------
 
 mm_df = f.clean_matches_mdb(mongo_matches)
 
@@ -153,15 +115,6 @@ mm_df = f.clean_matches_mdb(mongo_matches)
 #CREA UN DIZIO
 
 dizion = f.create_match_dict()
-# Creare una riga vuota
-#empty_row = pd.DataFrame([[''] * len(mm_df.columns)], columns=mm_df.columns)
-
-# Crea una nuova riga con valori di default e tipo di dato stringa per tutte le colonne
-#empty_row = pd.DataFrame({col: pd.Series([''], dtype=str) for col in mm_df.columns})
-
-# Aggiungi la nuova riga al DataFrame esistente
-#mm_df = pd.concat([mm_df, empty_row], ignore_index=True)
-
 
 #page
 st.divider()
@@ -180,14 +133,6 @@ with c2:
     if st.session_state.classifica_df.empty:
         st.error("Impossibile caricare i dati. Assicurati che il file sia corretto e nel percorso specificato.")
     else:
-        # Mostra il DataFrame iniziale
-
-        # if st.button('Mostra classifica attuale'):
-        # st.write("Classifica attuale:")
-        # st.dataframe(classifica_not_session, height=560)
-        # st.divider()
-
-
 
         # Selezione del giocatore e inserimento della posizione ----ACQUISIZIONE DEI DATI
         giorno_match = st.date_input('Inserisci la data della partita', min_value=date(2000, 1, 1), max_value=date.today())
@@ -200,14 +145,14 @@ with c2:
         # Bottone per aggiornare la classifica in memoria
         if st.button('Aggiorna Classifica in modo temporaneo'):
             #con dataframe
-            #st.session_state.mm_df,mex = aggiorna_match_day(st.session_state.mm_df, nome_giocatore, posizione, giorno_match)  <--------------------------------
+            
             #con dizionario
             st.session_state.dizio,mex = f.update_mday_by_dict(st.session_state.mm_df,st.session_state.dizio, nome_giocatore, posizione, giorno_match_)
 
             if mex == False:
                 st.error("Posizione o Giocatore già inseriti.")
                 #con dataframe
-                #st.table(st.session_state.mm_df)    <------------------------------------------------
+                
                 # con dizion
                 st.table(st.session_state.dizio)
             else:
@@ -216,8 +161,7 @@ with c2:
                 
                 # Mostra il DataFrame aggiornato della partita corrente:
                 st.write("Partita corrente e Classifica aggiornate in memoria temporanea:")
-                #con df
-                #st.dataframe(st.session_state.mm_df) <------------------------------------------
+              
                 # con dizion
                 x1,x2= st.columns(2)
                 with x1:
@@ -233,20 +177,11 @@ with c2:
         # Bottone per salvare la classifica aggiornata
         if st.button('Salvataggio permanente'):
 
-            #con file
-            #file_aggiornato_path = f'files/classifica_aggiornata_{datetime.now().strftime("%Y%m%d_%H%M%S")}.xlsx'  <-------------------
-            #st.session_state.classifica_df.to_excel(file_aggiornato_path,sheet_name='classifiche', index=False) <-------------------
-            #con mongo
-            f.aggiorna_player_da_dataframe_su_mdb(collection,st.session_state.classifica_df)  #### !!!!!! uso collection temp per fare i test !!!!!!!!!!!!!
+
+            f.aggiorna_player_da_dataframe_su_mdb(collection,st.session_state.classifica_df)  
 
             st.success(f"La classifica è stata aggiornata")
 
-            #salva il singolo giorno
-
-            #con file 
-            #st.session_state.mm_df.to_csv(matches_file_path,sep=";", index=False)  <-------------------------------
-            #con mongo
-            # 5. Inserisci il dizionario nella collezione come un documento
             collection_2.insert_one(st.session_state.dizio)
 
             

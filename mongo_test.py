@@ -25,8 +25,15 @@ db = client['poker_s3']
 # Seleziona la collezione
 mdbclass = db['classifica']
 
-ycoll = db['history']
+history = db['history']
 
+matches = db['matches']
+
+
+df = f.storicoPlayer(matches,"Antonio Rafaschieri")
+
+print(df)
+"""
 df_class = f.coll_to_df(mdbclass)
 print (df_class.head())
 
@@ -61,8 +68,6 @@ for document in result:
 
 # Stampa il documento trovato
 #print(document)
-
-"""
 
 
 # # Carica il file Excel in un DataFrame

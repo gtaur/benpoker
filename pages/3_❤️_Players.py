@@ -7,32 +7,23 @@ import tests_function as f
 #mongo connection
 collection=f.mongo_conn('players')
 collection_2=f.mongo_conn('classifica')
+collection_matches= f.mongo_conn('matches')
 
 ### CONVERTI COLLECTION IN DATAFRAME ###
 df = f.coll_to_df(collection)
-
 df = df.fillna('')
 df = df.drop(['_id'],axis=1)
-
 df2 = f.coll_to_df(collection_2)
-
 df2 = f.load_chart_mdb(df2)
 
-
+#####
 a1,a2,a3 = st.columns(3)
 
 with a2:
 
     st.title("Players")
 
-@st.cache_data
-def load_data(file):
-    
-    usrs = pd.read_csv(file,index_col=False,sep=";")
-    usrs = usrs.fillna('') 
-    
-    
-    return usrs
+
 
 def make_clickable(link):
     # target _blank to open new window
@@ -74,6 +65,8 @@ def show_info(selected_name, df):
         link = person_info['Paypal']
         st.subheader("Paypal")
         st.markdown(f"{link}")
+        
+        
     with c2:
     # Carica e mostra l'immagine
         image_path = person_info['Username'] + "-modified.png"
@@ -84,27 +77,21 @@ def show_info(selected_name, df):
         st.write(f"Podi: {person_info['Podi']}")
         st.write(f"Sconfitte: {person_info['Sconfitte']}")
         st.write(f"Guadagno: {person_info['Tot Cash Vinto']} €")
+    
+    st.divider()
+    x1,x2,x3 = st.columns(3) 
+    with x2:
+        
+        st.subheader("Storico Posizioni Giocatore")
+        df_player = f.storicoPlayer(collection_matches,selected_name)
+        st.write(df_player.to_html(escape=False, index=False), unsafe_allow_html=True)
 
-
-
-# Specifica la directory in cui cercare il file e il prefisso
-directory = 'files'
-prefix = 'classifica_aggiornata'
-
-# Trova il file più recente
-most_recent_file = f.get_most_recent_file(directory, prefix)
-
-#scommenta per usare il file
-#dati_utenti_df = load_data('files/players.csv')
 
 #mongo
 dati_utenti_df = df
 
 dati_utenti_df['Giocatore'] = dati_utenti_df['Nome'] + ' ' + dati_utenti_df['Cognome']
 
-#print(dati_utenti_df)
-#scommenta per usare il file
-#df_classifica = f.load_data_home("files/" + most_recent_file)
 
 df_classifica = df2
 

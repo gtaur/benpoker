@@ -20,18 +20,7 @@ with a2:
     st.title("Partite Passate")
 st.divider()
 
-@st.cache_data
-def load_data(file):
-    
-    usrs = pd.read_csv(file,index_col=False,sep=";")
-    usrs = usrs.fillna('') 
-    usrs = usrs.reset_index(drop=True)
-    
-    
-    return usrs
 
-#scommenta se vuoi usare il file
-#df = load_data("files/matches.csv")
 
 c1,c2,c3 = st.columns(3)
 
