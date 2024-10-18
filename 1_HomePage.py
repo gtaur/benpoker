@@ -31,8 +31,8 @@ a1,a2,a3 = st.columns(3)
 
 with a2:
     st.title("Ben Poker")
-    st.subheader("Season 3")
-    st.subheader("I debiti del secondo quadrimestre")
+    st.subheader("Season 4")
+    st.subheader("San San Nicola")
     
 st.divider()
 

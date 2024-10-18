@@ -30,9 +30,10 @@ history = db['history']
 matches = db['matches']
 
 
-df = f.storicoPlayer(matches,"Antonio Rafaschieri")
 
-print(df)
+f.reset_all_players(mdbclass)
+f.print_all_documents(mdbclass)
+
 """
 df_class = f.coll_to_df(mdbclass)
 print (df_class.head())

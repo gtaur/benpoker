@@ -35,7 +35,6 @@ def coll_to_df(coll):
 
     return df
 
-
 def add_col_position(df):
 
         # Aggiungere la colonna 'Posizione' che è l'indice + 1
@@ -87,7 +86,6 @@ def sposta_key_dict_in_cima(chiave_da_spostare,dizionario):
 
     return dizionario
 
-
 def load_ml_mdb(df):
     
     df = df.drop(['_id'],axis=1)
@@ -115,7 +113,6 @@ def clean_matches_mdb(df):
    df = df.fillna('')
    return df
 
-
 def update_mday_by_dict(df,dict,nome_giocatore, posizione,data):
 
     message = True
@@ -137,7 +134,6 @@ def update_mday_by_dict(df,dict,nome_giocatore, posizione,data):
       
 
     return dict,message
-
 
 def create_match_dict():
     dizio = {
@@ -162,7 +158,6 @@ def create_match_dict():
 
 
     return dizio
-
 
 def collection_update_by_field(collection,campo,valcamp,fieldToUpdate,new_val):
 
@@ -202,7 +197,6 @@ def aggiorna_player_da_dataframe_su_mdb(collection, dataframe):
         else:
             print(f"Nessun documento trovato con Giocatore {dizionario_riga['Giocatore']}.")
 
-
 def saveSnapshot(coll,dataframe):
     #mex = False
 
@@ -212,7 +206,6 @@ def saveSnapshot(coll,dataframe):
     my_dict_with_str_keys = {str(k): v for k, v in dict_of_dicts.items()}
     
     coll.insert_one(my_dict_with_str_keys)
-
 
 def storicoPlayer(collection, nome_giocatore):
     # Lista per memorizzare i risultati
@@ -242,7 +235,6 @@ def storicoPlayer(collection, nome_giocatore):
 
     return df
 
-
 def creaDFPartiteglobal (coll):
    # DataFrame vuoto per accumulare tutti i dati
     df_completo = pd.DataFrame()
@@ -271,6 +263,66 @@ def creaDFPartiteglobal (coll):
     print(df_completo)
 
     return df_completo
-
-
    
+def reset_fields_to_zero(collection, fields_to_reset):
+    """
+    Imposta a zero alcuni campi di ogni documento nella collezione MongoDB.
+
+    :param collection: La collezione MongoDB in cui aggiornare i documenti.
+    :param fields_to_reset: Lista dei nomi dei campi che devono essere impostati a zero.
+    """
+    # Crea un dizionario con i campi da aggiornare impostati a zero
+    update_fields = {field: 0 for field in fields_to_reset}
+
+    # Aggiorna tutti i documenti nella collezione impostando i campi specificati a zero
+    result = collection.update_many({}, {'$set': update_fields})
+
+    # Stampa il numero di documenti aggiornati
+    print(f"{result.modified_count} documenti aggiornati.")
+
+def get_all_keys(collection):
+    """
+    Legge tutte le chiavi uniche presenti nei documenti di una collezione MongoDB.
+
+    :param collection: La collezione MongoDB da cui leggere i documenti.
+    :return: Una lista contenente tutte le chiavi uniche.
+    """
+    all_keys = []  # Lista per raccogliere tutte le chiavi uniche
+
+    # Itera su tutti i documenti della collezione
+    for document in collection.find():
+        # Aggiunge le chiavi del documento corrente alla lista, se non già presenti
+        for key in document.keys():
+            if key not in all_keys:
+                all_keys.append(key)
+    
+    return all_keys
+
+def reset_all_players(coll):
+
+    lista = get_all_keys(coll)
+    lista.remove('Giocatore')
+    lista.remove('_id')
+
+    for elem in lista:
+        reset_fields_to_zero(coll,elem)
+
+def print_all_documents(collection):
+
+    """
+    Stampa tutti i documenti presenti in una collezione MongoDB.
+
+    :param collection: La collezione MongoDB da cui leggere i documenti.
+    """
+    # Itera su tutti i documenti della collezione
+    for document in collection.find():
+        # Stampa il documento
+        print(document)
+
+def delete_all_documents(collection):
+
+    # Cancellazione di tutti i documenti
+    result = collection.delete_many({})
+
+    # Stampa del numero di documenti cancellati
+    print(f"{result.deleted_count} documenti cancellati dalla collezione '{collection}'.")
