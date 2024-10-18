@@ -298,7 +298,7 @@ def get_all_keys(collection):
     
     return all_keys
 
-def reset_all_players(coll):
+def reset_all_players(coll): ### va corretta
 
     lista = get_all_keys(coll)
     lista.remove('Giocatore')
@@ -326,3 +326,44 @@ def delete_all_documents(collection):
 
     # Stampa del numero di documenti cancellati
     print(f"{result.deleted_count} documenti cancellati dalla collezione '{collection}'.")
+
+def copia_giocatori_e_crea_documenti(source_collection,target_collection):
+    """
+    Legge tutti i nomi dal campo 'giocatore' di ogni documento nella collezione sorgente
+    e crea nuovi documenti nella collezione di destinazione con chiavi predefinite e valori iniziali a zero.
+
+    :param source_db: Nome del database sorgente.
+    :param source_collection_name: Nome della collezione sorgente da cui leggere i giocatori.
+    :param target_db: Nome del database di destinazione.
+    :param target_collection_name: Nome della collezione di destinazione in cui inserire i nuovi documenti.
+    """
+
+    
+    # Lettura dei nomi completi dei giocatori dalla collezione sorgente
+    lista_giocatori = [
+        f"{doc['Nome']} {doc['Cognome']}"
+        for doc in source_collection.find()
+        if 'Nome' in doc and 'Cognome' in doc
+    ]
+
+    # Creazione dei nuovi documenti nella collezione di destinazione
+    nuovi_documenti = []
+    for giocatore in lista_giocatori:
+        nuovo_documento = {
+            'Giocatore': giocatore,
+            'Punti': 0,
+            'Sconfitte': 0,
+            'PG': 0,
+            'Tot Cash Vinto': 0,
+            'Podi': 0,
+            'MasterLeague': 0
+        }
+        nuovi_documenti.append(nuovo_documento)
+        print(nuovo_documento)
+
+    # Inserimento dei nuovi documenti nella collezione di destinazione
+    if nuovi_documenti:
+        target_collection.insert_many(nuovi_documenti)
+        print(f"{len(nuovi_documenti)} documenti inseriti nella collezione '{target_collection}'.")
+    else:
+        print("Nessun documento da inserire.")

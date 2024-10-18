@@ -28,10 +28,13 @@ mdbclass = db['classifica']
 history = db['history']
 
 matches = db['matches']
+players = db['players']
 
 
 
-f.reset_all_players(mdbclass)
-f.print_all_documents(mdbclass)
-f.delete_all_documents(matches)
+# f.reset_all_players(mdbclass)   #fa un casino da capire perchè
+# f.print_all_documents(mdbclass)
+# f.delete_all_documents(mdbclass)
+
+#f.copia_giocatori_e_crea_documenti(players,mdbclass)
 
