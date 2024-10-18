@@ -12,7 +12,7 @@ with c1:
     st.write("7020")
     
     st.subheader("Stack")
-    st.write("5000\n \n 4 - fiches da 25 \n \n 4 - fiches da 100 \n \n 3 - fiches da 500 \n \n 3 - fiches da ben 1000")
+    st.write("6000\n \n 4 - fiches da 25 \n \n 4 - fiches da 100 \n \n 5 - fiches da 500 \n \n 3 - fiches da ben 1000")
     
 with c2:
     st.subheader("Bui")

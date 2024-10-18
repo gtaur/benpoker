@@ -8,7 +8,7 @@ with a2:
 
     st.title("Storico Torneo")
 st.divider()
-c1,c2,c3 = st.columns(2)
+c1,c2,c3 = st.columns(3)
 
 with c1:
     st.subheader("Season 1 Winners")
