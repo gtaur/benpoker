@@ -5,6 +5,8 @@ import datetime
 import pandas as pd
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+import streamlit as st
+
 
 def mongo_conn(collezione):
    ### da parametrizzare anche uri e db
@@ -86,6 +88,7 @@ def sposta_key_dict_in_cima(chiave_da_spostare,dizionario):
 
     return dizionario
 
+
 def load_ml_mdb(df):
     
     df = df.drop(['_id'],axis=1)
@@ -97,6 +100,7 @@ def load_ml_mdb(df):
     ml.index = ml.index + 1
 
     return ml
+
 
 def load_chart_mdb(df):
 
