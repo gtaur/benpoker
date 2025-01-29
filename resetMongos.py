@@ -23,7 +23,7 @@ except Exception as e:
 db = client['poker_s3']
 
 # Seleziona la collezione
-mdbclass = db['classifica']
+mclass = db['classifica']
 
 history = db['history']
 
@@ -32,7 +32,13 @@ players = db['players']
 
 
 
-# f.reset_all_players(mdbclass)   #fa un casino da capire perchè
+#f.delete_all_docs_minus_one_by_id(matches,"67123d7e5d8f80c1755aa861")
+
+#f.clean_players_chart(mclass)
+f.print_all_documents(mclass)
+
+
+
 # f.print_all_documents(mdbclass)
 # f.delete_all_documents(mdbclass)
 

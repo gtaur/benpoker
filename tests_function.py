@@ -6,6 +6,7 @@ import pandas as pd
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import streamlit as st
+from bson import ObjectId
 
 
 def mongo_conn(collezione):
@@ -332,6 +333,8 @@ def delete_all_documents(collection):
     print(f"{result.deleted_count} documenti cancellati dalla collezione '{collection}'.")
 
 def copia_giocatori_e_crea_documenti(source_collection,target_collection):
+
+
     """
     Legge tutti i nomi dal campo 'giocatore' di ogni documento nella collezione sorgente
     e crea nuovi documenti nella collezione di destinazione con chiavi predefinite e valori iniziali a zero.
@@ -371,3 +374,44 @@ def copia_giocatori_e_crea_documenti(source_collection,target_collection):
         print(f"{len(nuovi_documenti)} documenti inseriti nella collezione '{target_collection}'.")
     else:
         print("Nessun documento da inserire.")
+
+
+def delete_all_docs_minus_one_by_id(coll,id_doc):
+
+
+    # ID del documento da mantenere (deve essere di tipo ObjectId)
+
+    id_to_keep = ObjectId(id_doc)  # Sostituiscilo con il tuo ObjectId
+
+    # Cancella tutti i documenti tranne quello con l'ID specifico
+    coll.delete_many({"_id": {"$ne": id_to_keep}})
+
+    print("Tutti i documenti sono stati cancellati tranne quello con _id:", id_to_keep)
+
+def clean_players_chart(collection):
+
+    list_keys = ['Punti', 'Sconfitte', 'PG', 'Tot Cash Vinto', 'Podi', 'MasterLeague']
+
+    for key in list_keys:
+        collection.update_many({}, {"$set": {key: None}})
+
+print("Campo aggiornato in tutti i documenti!")
+
+def clean_single_doc(collection,keys_list):
+        
+    for key in keys_list:
+        collection.update_many({}, {"$set": {key: None}})
+
+
+def key_values_tolist(collection):
+    # Trova un documento qualsiasi
+    doc = collection.find_one()
+
+    if doc:
+        # Ottieni i nomi dei campi (chiavi) e li salva in una lista
+        lista_campi = list(doc.keys())
+        print("Campi trovati:", lista_campi)
+    else:
+        print("Nessun documento trovato nella collection.")
+
+    return lista_campi

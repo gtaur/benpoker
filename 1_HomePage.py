@@ -31,8 +31,8 @@ a1,a2,a3 = st.columns(3)
 
 with a2:
     st.title("Ben Poker")
-    st.subheader("Season 4")
-    st.subheader("San San Nicola")
+    st.subheader("Season 5")
+    st.subheader("Chiangiuta World Series")
     
 st.divider()
 
