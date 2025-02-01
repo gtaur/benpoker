@@ -1,7 +1,8 @@
-# Cartelle di sistema
+# Cartelle 
 __pycache__/
 recap/
 foto/altre
 foto/full
 files/
 temp/
+utilities/
