@@ -32,6 +32,17 @@ players = db['players']
 
 
 
+source_collection = matches
+target_collection = db["matches_test"]
+
+# Copia tutti i documenti dalla collection originale a quella clonata
+documents = list(source_collection.find({}))  # Trova tutti i documenti
+if documents:
+    target_collection.insert_many(documents)  # Inserisci nella nuova collection
+
+print("Collection clonata con successo!")
+
+
 #f.delete_all_docs_minus_one_by_id(matches,"67123d7e5d8f80c1755aa861")
 
 # pulizia valori numerici dai players
