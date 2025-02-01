@@ -1,2 +1,0 @@
-streamlit run 1_HomePage.py
-Se desideri fermare l'app Streamlit, puoi farlo premendo Ctrl+C nella console.

@@ -62,6 +62,7 @@ else:
 
 
 classifica_df = classifica_df.drop(['Sconfitte','Tot Cash Vinto','Podi'],axis=1)
+classifica_df = classifica_df.sort_values(by=['Punti', 'PG'], ascending=[False, False])
 
 
 
