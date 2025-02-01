@@ -34,10 +34,14 @@ players = db['players']
 
 #f.delete_all_docs_minus_one_by_id(matches,"67123d7e5d8f80c1755aa861")
 
+# pulizia valori numerici dai players
 #f.clean_players_chart(mclass)
-f.print_all_documents(mclass)
 
 
+#f.print_all_documents(mclass)
+
+# Rimuove il campo "campo_da_rimuovere" da tutti i documenti
+#mclass.update_many({}, {"$unset": {"Cash Vinto": ""}})
 
 # f.print_all_documents(mdbclass)
 # f.delete_all_documents(mdbclass)

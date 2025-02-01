@@ -5,11 +5,17 @@ import tests_function as f
 #mongo connection
 collection=f.mongo_conn('classifica')
 historyCol = f.mongo_conn('history')
+matches = f.mongo_conn('matches')
+
+n_matches = matches.count_documents({})
+
+
 ### CONVERTI COLLECTION IN DATAFRAME ###
 df = f.coll_to_df(collection)
 
 #aggiusta il df
 df = f.load_chart_mdb(df)
+
 
 
 #######################
@@ -22,6 +28,8 @@ st.set_page_config(
 classifica_df = df
 #aggiunge colonna pos
 classifica_df = f.add_col_position(classifica_df)
+
+
 
 
 st.sidebar.success("Seleziona una pagina")
@@ -38,7 +46,24 @@ st.divider()
 
 c1, c2, c3 = st.columns(3)
 
+
+
+if n_matches != 0:
+
+# Aggiunta della colonna 'Percentuale' (A diviso B, moltiplicato per 100)
+# Calcolo della percentuale e aggiunta del simbolo '%'
+# Calcolo della percentuale di presenze e aggiunta del simbolo '%', senza numeri decimali
+    classifica_df['Presenze'] = (classifica_df['PG'].div(n_matches).mul(100)).astype(int).astype(str) + '%'
+
+else:
+
+    classifica_df['Presenze'] = 0
+
+
+
 classifica_df = classifica_df.drop(['Sconfitte','Tot Cash Vinto','Podi'],axis=1)
+
+
 
 with c2:
 

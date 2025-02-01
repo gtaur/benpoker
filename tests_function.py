@@ -113,18 +113,13 @@ def load_chart_mdb(df):
 
     return cf
 
-def clean_matches_mdb(df):
-   df = df.drop(['_id'],axis=1)
-   df = df.fillna('')
-   return df
 
-def update_mday_by_dict(df,dict,nome_giocatore, posizione,data):
+
+def update_mday_by_dict(dict,nome_giocatore, posizione):
 
     message = True
-    penultimo_index = df.index[-1]
-    #trova e inserisci giorno match:
-    dict["matchday"] = int(df.at[penultimo_index,"matchday"]) + 1
-    dict["data"] = data #.strftime("%d/%m/%Y")
+
+
     posiz = str(posizione)
     valoriDict = dict.values()
     valoriDict_= [elemento for elemento in valoriDict if elemento is not None]
@@ -140,9 +135,9 @@ def update_mday_by_dict(df,dict,nome_giocatore, posizione,data):
 
     return dict,message
 
-def create_match_dict():
+def create_match_dict(matchday):
     dizio = {
-    "matchday": None,
+    "matchday": matchday,
     "data": None,
     "1": None,
     "2": None,
@@ -393,7 +388,7 @@ def clean_players_chart(collection):
     list_keys = ['Punti', 'Sconfitte', 'PG', 'Tot Cash Vinto', 'Podi', 'MasterLeague']
 
     for key in list_keys:
-        collection.update_many({}, {"$set": {key: None}})
+        collection.update_many({}, {"$set": {key: 0}})
 
 print("Campo aggiornato in tutti i documenti!")
 

@@ -98,6 +98,15 @@ collection_2=f.mongo_conn('matches')
 ### CONVERTI COLLECTION IN DATAFRAME ###
 mongo_matches = f.coll_to_df(collection_2)
 
+n_matches = collection_2.count_documents({})
+
+
+if n_matches == 0:
+    matchday_numero = 1
+else:
+   matchday_numero = n_matches +1
+    
+
 #######
 # connesione a collection temp per i test
 #test_coll=f.mongo_conn('test')
@@ -107,14 +116,14 @@ mongo_matches = f.coll_to_df(collection_2)
 
 classifica_not_session = load_data_no_file(mongo_df_cl)
 
-mm_df = f.clean_matches_mdb(mongo_matches)
+
 
 ########################################################################
 
 
 #CREA UN DIZIO
 
-dizion = f.create_match_dict()
+dizion = f.create_match_dict(matchday_numero)
 
 #page
 st.divider()
@@ -125,8 +134,7 @@ with c2:
 #inizializza sessione
     if 'classifica_df' not in st.session_state:
         st.session_state.classifica_df = classifica_not_session
-    if 'mm_df' not in st.session_state:
-        st.session_state.mm_df = mm_df #<---- a tes erve solo un dato da questo dataframe cioè il numero della partita
+
     if 'dizio' not in st.session_state:
         st.session_state.dizio = dizion
 
@@ -137,6 +145,8 @@ with c2:
         # Selezione del giocatore e inserimento della posizione ----ACQUISIZIONE DEI DATI
         giorno_match = st.date_input('Inserisci la data della partita', min_value=date(2000, 1, 1), max_value=date.today())
         giorno_match_ = giorno_match.strftime("%d/%m/%Y")
+        st.session_state.dizio["data"] = giorno_match_
+
         nome_giocatore = st.selectbox('Seleziona il Giocatore', st.session_state.classifica_df['Giocatore'].sort_values())
         posizione = st.number_input('Inserisci la posizione ottenuta nell\'ultima giornata', min_value=1, max_value=15)
         cash = st.number_input('Inserisci il guadagno in cash', min_value=0)
@@ -147,7 +157,7 @@ with c2:
             #con dataframe
             
             #con dizionario
-            st.session_state.dizio,mex = f.update_mday_by_dict(st.session_state.mm_df,st.session_state.dizio, nome_giocatore, posizione, giorno_match_)
+            st.session_state.dizio,mex = f.update_mday_by_dict(st.session_state.dizio, nome_giocatore, posizione)
 
             if mex == False:
                 st.error("Posizione o Giocatore già inseriti.")
@@ -187,6 +197,6 @@ with c2:
             
             st.success("Partita salvata nello storico")
 
-            dizion = f.create_match_dict()
+            dizion = f.create_match_dict(matchday_numero)
             st.session_state.dizio = dizion
 
