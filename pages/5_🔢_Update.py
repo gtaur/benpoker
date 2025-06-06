@@ -5,8 +5,7 @@ import datetime
 import tests_function as f
 
 
-# Definizione della password corretta
-PASSWORD_CORRETTA = "7e2Fai1"  # Sostituiscila con una password sicura
+
 
 a1,a2,a3 = st.columns(3)
 
@@ -101,6 +100,11 @@ collection_2=f.mongo_conn('matches')
 
 ### CONVERTI COLLECTION matches IN DATAFRAME ###
 mongo_matches = f.coll_to_df(collection_2)
+
+#mongo_pass = f.mongo_conn('oldplayers')
+
+# Definizione della password corretta
+PASSWORD_CORRETTA = "7e2Fai1"  
 
 # conta le partite passate e genera il numero del matchday
 n_matches = collection_2.count_documents({})
