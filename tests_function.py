@@ -410,3 +410,4 @@ def key_values_tolist(collection):
         print("Nessun documento trovato nella collection.")
 
     return lista_campi
+
