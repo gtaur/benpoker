@@ -28,7 +28,7 @@ with col1:
     numero_partecipanti_iniziali = st.number_input(
         "Numero partecipanti iniziali",
         min_value=1,
-        value=8,
+        value=10,
         step=1,
         help="Numero di giocatori all'inizio del torneo"
     )
@@ -36,7 +36,7 @@ with col1:
     stack_iniziale = st.number_input(
         "Stack iniziale per giocatore",
         min_value=1,
-        value=10000,
+        value=6000,
         step=500,
         help="Chips che ogni giocatore aveva all'inizio"
     )
@@ -54,10 +54,16 @@ with col2:
     big_blind = st.number_input(
         "Valore del Big Blind attuale",
         min_value=1,
+        max_value=stack_iniziale,
         value=800,
         step=50,
-        help="Valore attuale del big blind"
+        help="Valore attuale del big blind (non dovrebbe superare lo stack iniziale)"
     )
+
+    # Controllo coerenza Big Blind
+    if big_blind > stack_iniziale:
+        st.warning("⚠️ Il Big Blind è superiore allo stack iniziale. Verifica che i valori siano corretti.")
+
 
 # Bottone per il calcolo
 st.markdown("---")
@@ -99,7 +105,7 @@ if calcola and partecipanti_in_gioco > 0:
         )
     
     with col4:
-        rapporto = stack_medio / big_blind if big_blind > 0 else 0
+        rapporto = stack_medio / big_blind if big_blind > 0 and big_blind < 5000 else 0
         st.metric(
             "Rapporto Stack/BB",
             f"{rapporto:.1f}x",
@@ -109,7 +115,7 @@ if calcola and partecipanti_in_gioco > 0:
     # Risultato principale
     st.markdown("---")
     
-    if stack_medio > soglia_calmierazione:
+    if stack_medio > soglia_calmierazione or big_blind > stack_iniziale:
         st.success("🛑 **I BUI SI FERMANO**", icon="✅")
         st.balloons()
     else:
