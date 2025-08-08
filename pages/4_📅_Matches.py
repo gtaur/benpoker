@@ -44,11 +44,11 @@ with c2:
         df_riga_trasposta.columns = ['Posizione', 'Giocatore']
         
         # Crea un container con bordo
-        container = st.container()
-        
+        #container = st.container()
+        st.divider()
         # Scrivi il DataFrame trasposto come HTML
-        container.write(df_riga_trasposta.to_html(escape=False, index=False), unsafe_allow_html=True)
-        
+        st.write(df_riga_trasposta.to_html(escape=False, index=False), unsafe_allow_html=True)
+        st.divider()
         #st.write(row.to_html(escape=False, index=False), unsafe_allow_html=True)
         #container.write(df_riga_df_reset.to_html(escape=False, index=False), unsafe_allow_html=True)
     
