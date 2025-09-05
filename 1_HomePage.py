@@ -54,6 +54,12 @@ if n_matches != 0:
 # Calcolo della percentuale e aggiunta del simbolo '%'
 # Calcolo della percentuale di presenze e aggiunta del simbolo '%', senza numeri decimali
     classifica_df['Presenze'] = (classifica_df['PG'].div(n_matches).mul(100)).astype(int).astype(str) + '%'
+    # Versione con valori stringa
+    soglia_attivi = (n_matches // 2) + 1
+    classifica_df['Attivi'] = classifica_df['PG'].apply(lambda x: 'Sì' if x >= soglia_attivi else 'No')
+
+    n_attivi = classifica_df['Attivi'].value_counts()['Sì']
+    str_attivi= str(n_attivi)
 
 else:
 
@@ -61,7 +67,7 @@ else:
 
 
 
-classifica_df = classifica_df.drop(['Sconfitte','Tot Cash Vinto','Podi'],axis=1)
+classifica_df = classifica_df.drop(['Sconfitte','Tot Cash Vinto','Podi','Attivi'],axis=1)
 classifica_df = classifica_df.sort_values(by=['Punti', 'PG'], ascending=[False, False])
 
 
@@ -74,6 +80,10 @@ with c2:
     #st.divider()
     st.write(classifica_df.to_html(escape=False, index=False), unsafe_allow_html=True)
 
+    st.divider()
+    
+
+    st.subheader("Attivi: " + str_attivi)
     st.divider()
 
     if st.button('Salva uno Snapshot della classifica'):
