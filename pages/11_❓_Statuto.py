@@ -37,9 +37,7 @@ df_punti.columns = [f"{col} giocatori" for col in df_punti.columns]
 # Sostituisce i NaN con stringhe vuote per una visualizzazione più pulita
 df_punti = df_punti.fillna('')
 
-# Visualizza su Streamlit
-st.title("Tabella Punteggi Torneo Poker")
-st.subheader("Punti assegnati per posizione in base al numero di partecipanti")
+
 
 # # Opzione 1: Tabella semplice con st.dataframe
 # st.dataframe(df_punti, use_container_width=True)
