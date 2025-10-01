@@ -51,14 +51,21 @@ with col2:
         help="Numero di giocatori che non sono ancora eliminati"
     )
     
-    big_blind = st.number_input(
-        "Valore del Big Blind attuale",
-        min_value=1,
-        max_value=stack_iniziale,
-        value=800,
-        step=50,
-        help="Valore attuale del big blind (non dovrebbe superare lo stack iniziale)"
-    )
+    # big_blind = st.selectbox(
+    #     "Valore del Big Blind attuale",
+    #     options=[600, 800, 1200, 1600,2000],
+    #     index=2,  # Imposta 800 come valore predefinito (indice parte da 0)
+    #     help="Seleziona il valore attuale del big blind"
+    # )
+
+    big_blind = st.radio(
+    "Valore del Big Blind attuale",
+    options=[600, 800, 1200, 1600,2000],
+    index=2,  # Imposta 800 come valore predefinito
+    horizontal=True,  # Dispone i bottoni orizzontalmente
+    help="Seleziona il valore attuale del big blind"
+)
+
 
     # Controllo coerenza Big Blind
     if big_blind > stack_iniziale:
@@ -147,4 +154,3 @@ else:
 
 # Footer
 st.markdown("---")
-st.caption("🃏 Calcolatore per tornei di poker - Regola di calmierazione standard")
