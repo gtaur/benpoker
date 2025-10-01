@@ -24,7 +24,7 @@ a1, a2, a3 = st.columns(3)
 with a2:
     st.title("Ben Poker")
     st.subheader("Season 7")
-    st.subheader("Lorem Ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua")
+    st.subheader("Il ritorno della Multa")
 
 st.divider()
 
