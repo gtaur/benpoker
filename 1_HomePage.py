@@ -70,12 +70,13 @@ else:
 classifica_df = classifica_df.drop(['Sconfitte','Tot Cash Vinto','Podi','Attivi'],axis=1)
 classifica_df = classifica_df.sort_values(by=['Punti', 'PG'], ascending=[False, False])
 
-
+numeromatch = str(n_matches)
 
 with c2:
 
 
     st.subheader("Classifica Generale")
+    st.write("Partite registrate: " + numeromatch + "/12")
     #st.dataframe(classifica_df,height=560)  
     #st.divider()
     st.write(classifica_df.to_html(escape=False, index=False), unsafe_allow_html=True)

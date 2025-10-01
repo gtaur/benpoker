@@ -15,4 +15,7 @@ with c1:
     st.image("foto/old_charts/s5_analytics.jpg", caption="Season 5 - Analytics")
 
 
-
+with c2:
+    st.subheader("Season 6 - Revenge of DDL")
+    st.image("foto/old_charts/s6.jpg", caption="Season 6 - Final Chart")
+    st.image("foto/old_charts/s6_analytics.jpg", caption="Season 6 - Analytics")

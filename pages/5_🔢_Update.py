@@ -13,14 +13,45 @@ with a2:
 
     st.title('Aggiorna Classifica')
 
-# Funzione per calcolare i punti in base alla posizione
-def calcola_punti(posizione):
-    punti_posizione = {1: 10, 2: 8, 3: 6, 4: 3, 5: 2, 6: 1}
-    return punti_posizione.get(posizione, 0)
+# # Funzione per calcolare i punti in base alla posizione
+# def calcola_punti(posizione,num_players):
+#     punti_posizione = {1: 10, 2: 8, 3: 6, 4: 3, 5: 2, 6: 1}
+#     return punti_posizione.get(posizione, 0)
+
+
+###
+def calcola_punti(posizione, num_partecipanti):
+    """
+    Calcola i punti in base alla posizione e al numero di partecipanti
+    secondo la tabella ufficiale del torneo
+    """
+    
+    # Dizionario con le tabelle punti per ogni numero di giocatori
+    tabella_punti = {
+        6: {1: 6, 2: 4, 3: 2, 4: 1},
+        7: {1: 7, 2: 5, 3: 3, 4: 1},
+        8: {1: 8, 2: 6, 3: 4, 4: 2, 5: 1},
+        9: {1: 9, 2: 7, 3: 5, 4: 2, 5: 1},
+        10: {1: 10, 2: 8, 3: 6, 4: 3, 5: 2, 6: 1},
+        11: {1: 11, 2: 9, 3: 7, 4: 3, 5: 2, 6: 1},
+        12: {1: 12, 2: 10, 3: 8, 4: 4, 5: 3, 6: 2, 7: 1},
+        13: {1: 13, 2: 11, 3: 9, 4: 4, 5: 3, 6: 2, 7: 1},
+        14: {1: 14, 2: 12, 3: 10, 4: 5, 5: 4, 6: 3, 7: 2, 8: 1},
+        15: {1: 15, 2: 13, 3: 11, 4: 5, 5: 4, 6: 3, 7: 2, 8: 1},
+        16: {1: 16, 2: 14, 3: 12, 4: 6, 5: 5, 6: 4, 7: 3, 8: 2, 9: 1}
+    }
+    
+    # Se il numero di partecipanti non è nella tabella, restituisce 0
+    if num_partecipanti not in tabella_punti:
+        return 0
+    
+    # Restituisce i punti per la posizione, 0 se la posizione non ha punti
+    return tabella_punti[num_partecipanti].get(posizione, 0)
+###
 
 # Funzione per aggiornare il DataFrame
-def aggiorna_classifica(df, nome_giocatore, posizione, cash):
-    punti = calcola_punti(posizione)
+def aggiorna_classifica(df, nome_giocatore, posizione, cash,num_partecipanti):
+    punti = calcola_punti(posizione,num_partecipanti)
     
     if nome_giocatore in df['Giocatore'].values:
         index = df.index[df['Giocatore'] == nome_giocatore].tolist()[0]
@@ -87,9 +118,11 @@ def load_data_no_file(dataf):
 ####### mongo
 
 #mongo classifica
+
 collection=f.mongo_conn('classifica')
 
 ### CONVERTI COLLECTION CLassifica IN DATAFRAME ###
+
 mongo_df_cl = f.coll_to_df(collection)
 
 #aggiusta il df
@@ -155,9 +188,11 @@ with c2:
             st.success("Data inserita")
 
         st.divider()
+        num_partecipanti = st.number_input("Numero di partecipanti", value=10, min_value=5, max_value=15)
+        st.divider()
         
         listaplayersandnone = [None] + list(st.session_state.classifica_df['Giocatore'])        
-        for i in range(1,num_plx+1):
+        for i in range(1,num_partecipanti):
             nome_giocatore = st.selectbox('Seleziona il '+str(i)+'° Classificato:', listaplayersandnone)
             posizione = i
             if i <= 3:
@@ -180,7 +215,7 @@ with c2:
                     #st.table(st.session_state.dizio)
                 else:
 
-                    st.session_state.classifica_df = aggiorna_classifica(st.session_state.classifica_df, nome_giocatore, posizione, cash)
+                    st.session_state.classifica_df = aggiorna_classifica(st.session_state.classifica_df, nome_giocatore, posizione, cash,num_partecipanti)
                     
                     # Mostra il DataFrame aggiornato della partita corrente:
                     st.success("Inserito in memoria temp")
