@@ -25,6 +25,8 @@ with c2:
 with c3:
     st.subheader("Season 3 Winners")
     st.write("1° - Rastroni \n \n 2° - Carella  \n \n 3° - Marco ")
+    st.subheader("Season 6 Winners")
+    st.write("1° - MrToto \n \n 2° - Walter  \n \n 3° - Brizio ")
 
 
 
