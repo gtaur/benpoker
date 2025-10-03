@@ -195,7 +195,7 @@ with c2:
         st.divider()
         
         #listaplayersandnone = [None] + list(st.session_state.classifica_df['Giocatore'])        
-        for i in range(1,num_partecipanti):
+        for i in range(1,num_partecipanti+1):
             nome_giocatore = st.selectbox('Seleziona il '+str(i)+'° Classificato:', listaplayersandnone)
             
             # """
