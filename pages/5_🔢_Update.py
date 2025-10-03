@@ -49,6 +49,8 @@ def calcola_punti(posizione, num_partecipanti):
     return tabella_punti[num_partecipanti].get(posizione, 0)
 ###
 
+
+
 # Funzione per aggiornare il DataFrame
 def aggiorna_classifica(df, nome_giocatore, posizione, cash,num_partecipanti):
     punti = calcola_punti(posizione,num_partecipanti)
@@ -154,6 +156,7 @@ num_plx = len(mongo_df_cl)
 classifica_not_session = load_data_no_file(mongo_df_cl)
 
 
+listaplayersandnone = [None] + list(classifica_not_session['Giocatore'])  
 
 ########################################################################
 
@@ -180,7 +183,7 @@ with c2:
     else:
 
         # Selezione del giocatore e inserimento della posizione ----ACQUISIZIONE DEI DATI
-        giorno_match = st.date_input('Inserisci la data della partita', min_value=date(2000, 1, 1), max_value=date.today())
+        giorno_match = st.date_input('Inserisci la data della partita', min_value=date(2025, 1, 1), max_value=date.today())
         giorno_match_ = giorno_match.strftime("%d/%m/%Y")
         if st.button('Conferma data'):
             
@@ -191,9 +194,18 @@ with c2:
         num_partecipanti = st.number_input("Numero di partecipanti", value=10, min_value=5, max_value=15)
         st.divider()
         
-        listaplayersandnone = [None] + list(st.session_state.classifica_df['Giocatore'])        
+        #listaplayersandnone = [None] + list(st.session_state.classifica_df['Giocatore'])        
         for i in range(1,num_partecipanti):
             nome_giocatore = st.selectbox('Seleziona il '+str(i)+'° Classificato:', listaplayersandnone)
+            
+            """
+                        nome_giocatore = st.radio('Seleziona il '+str(i)+'° Classificato:', 
+                                      options=listaplayersandnone,
+                                      index= 0,
+                                      horizontal=True
+                                          )
+            posizione = i
+            """
             posizione = i
             if i <= 3:
                 cash = st.number_input('Inscerici il netto del '+str(i)+'°:', min_value=0)

@@ -8,7 +8,7 @@ from pymongo.server_api import ServerApi
 import streamlit as st
 from bson import ObjectId
 
-
+@st.cache_data
 def mongo_conn(collezione):
    ### da parametrizzare anche uri e db
 
@@ -26,7 +26,7 @@ def mongo_conn(collezione):
     collection = db[collezione]
 
     return collection
-
+@st.cache_data
 def coll_to_df(coll):
    ### CONVERTI COLLECTION IN DATAFRAME ###
 
@@ -89,7 +89,7 @@ def sposta_key_dict_in_cima(chiave_da_spostare,dizionario):
 
     return dizionario
 
-
+@st.cache_data
 def load_ml_mdb(df):
     
     df = df.drop(['_id'],axis=1)
@@ -102,7 +102,7 @@ def load_ml_mdb(df):
 
     return ml
 
-
+@st.cache_data
 def load_chart_mdb(df):
 
     df = df.drop(['_id'],axis=1)
