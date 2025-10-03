@@ -8,7 +8,7 @@ from pymongo.server_api import ServerApi
 import streamlit as st
 from bson import ObjectId
 
-@st.cache_resource #non cache data
+#
 def mongo_conn(collezione):
    ### da parametrizzare anche uri e db
 
