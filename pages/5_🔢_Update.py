@@ -198,14 +198,14 @@ with c2:
         for i in range(1,num_partecipanti):
             nome_giocatore = st.selectbox('Seleziona il '+str(i)+'° Classificato:', listaplayersandnone)
             
-            """
-                        nome_giocatore = st.radio('Seleziona il '+str(i)+'° Classificato:', 
-                                      options=listaplayersandnone,
-                                      index= 0,
-                                      horizontal=True
-                                          )
-            posizione = i
-            """
+            # """
+            #             nome_giocatore = st.radio('Seleziona il '+str(i)+'° Classificato:', 
+            #                           options=listaplayersandnone,
+            #                           index= 0,
+            #                           horizontal=True
+            #                               )
+            # posizione = i
+            # """
             posizione = i
             if i <= 3:
                 cash = st.number_input('Inscerici il netto del '+str(i)+'°:', min_value=0)
