@@ -8,7 +8,7 @@ from pymongo.server_api import ServerApi
 import streamlit as st
 from bson import ObjectId
 
-@st.cache_data
+@st.cache_resource #non cache data
 def mongo_conn(collezione):
    ### da parametrizzare anche uri e db
 
@@ -26,6 +26,8 @@ def mongo_conn(collezione):
     collection = db[collezione]
 
     return collection
+
+
 @st.cache_data
 def coll_to_df(coll):
    ### CONVERTI COLLECTION IN DATAFRAME ###
@@ -66,6 +68,8 @@ def rimuovi_elemento(lista):
   else:
     print("Risposta non valida. Riprova.")
 
+
+
 def create_tables(list):
     lista_pari = []
     lista_dispari = []
@@ -88,6 +92,8 @@ def sposta_key_dict_in_cima(chiave_da_spostare,dizionario):
     
 
     return dizionario
+   
+
 
 @st.cache_data
 def load_ml_mdb(df):
